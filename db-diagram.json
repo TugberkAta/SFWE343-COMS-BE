@@ -1,0 +1,1831 @@
+{
+  "id": "00000000-0000-0000-0000-000000000000",
+  "name": "database.json",
+  "sources": [
+    {
+      "id": "98006620-7170-46c5-8740-3c9d395729a5",
+      "name": "database.json",
+      "kind": {
+        "kind": "JsonLocalFile",
+        "name": "database.json",
+        "size": 4777,
+        "modified": 1678724688831
+      },
+      "content": [],
+      "tables": [
+        {
+          "schema": "public",
+          "table": "course_outline_versions",
+          "columns": [
+            {
+              "name": "change_note",
+              "type": "varchar(255)",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "course_outline_version_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "created_at",
+              "type": "datetime",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "created_by_user_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "outline_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "snapshot_json",
+              "type": "json",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "course_outline_versions_pk",
+            "columns": ["course_outline_version_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "course_outlines",
+          "columns": [
+            {
+              "name": "additional_reading_text",
+              "type": "text",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "aims_objectives_text",
+              "type": "text",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "assistant_user_id",
+              "type": "int",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "content_text",
+              "type": "text",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "course_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "created_at",
+              "type": "datetime",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "created_by_user_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "lecturer_user_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "outline_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "prerequisites_text",
+              "type": "text",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "status",
+              "type": "enum('draft','published','archived')",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "term_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "textbooks_text",
+              "type": "text",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "updated_at",
+              "type": "datetime",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "version_no",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "course_outlines_pk",
+            "columns": ["outline_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "course_prerequisites",
+          "columns": [
+            {
+              "name": "course_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "prerequisite_course_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "course_prerequisites_pk",
+            "columns": ["course_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "courses",
+          "columns": [
+            {
+              "name": "category",
+              "type": "enum('university_core','university_elective','area_core','area_elective','faculty_core','faculty_elective')",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "code",
+              "type": "varchar(20)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "course_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "course_level_text",
+              "type": "varchar(120)",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "ects_credits",
+              "type": "decimal(4,1)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "lab_hours",
+              "type": "tinyint",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "language",
+              "type": "varchar(40)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "local_credits",
+              "type": "decimal(4,1)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "name",
+              "type": "varchar(255)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "program_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "theory_hours",
+              "type": "tinyint",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "tutorial_hours",
+              "type": "tinyint",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "courses_pk",
+            "columns": ["course_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "departments",
+          "columns": [
+            {
+              "name": "code",
+              "type": "varchar(20)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "department_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "name",
+              "type": "varchar(150)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "departments_pk",
+            "columns": ["department_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "migrations",
+          "columns": [
+            {
+              "name": "id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "name",
+              "type": "varchar(255)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "run_on",
+              "type": "datetime",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "migrations_pk",
+            "columns": ["id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "outline_evaluation_processes",
+          "columns": [
+            {
+              "name": "description",
+              "type": "text",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "evaluation_process_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "name",
+              "type": "varchar(120)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "notes",
+              "type": "text",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "outline_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "stage",
+              "type": "enum('QA-HEAD','QA-COMMITTEE','PROGRAM-LEADER')",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "outline_evaluation_processes_pk",
+            "columns": ["evaluation_process_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "outline_learning_outcomes",
+          "columns": [
+            {
+              "name": "clo_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "clo_number",
+              "type": "tinyint",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "domain",
+              "type": "enum('knowledge','skill','competency')",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "outline_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "statement",
+              "type": "text",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "outline_learning_outcomes_pk",
+            "columns": ["clo_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "outline_policies",
+          "columns": [
+            {
+              "name": "body_text",
+              "type": "text",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "outline_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "policy_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "policy_order",
+              "type": "tinyint",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "title",
+              "type": "varchar(150)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "outline_policies_pk",
+            "columns": ["policy_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "outline_reference_links",
+          "columns": [
+            {
+              "name": "label",
+              "type": "varchar(150)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "link_order",
+              "type": "tinyint",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "outline_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "reference_link_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "url",
+              "type": "varchar(500)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "outline_reference_links_pk",
+            "columns": ["reference_link_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "outline_schedule_slots",
+          "columns": [
+            {
+              "name": "day_of_week",
+              "type": "enum('monday','tuesday','wednesday','thursday','friday','saturday','sunday')",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "end_time",
+              "type": "time",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "notes",
+              "type": "varchar(200)",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "outline_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "slot_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "slot_type",
+              "type": "enum('lecture','office_hour')",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "start_time",
+              "type": "time",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "outline_schedule_slots_pk",
+            "columns": ["slot_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "outline_weekly_topic_clos",
+          "columns": [
+            {
+              "name": "clo_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "weekly_topic_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "outline_weekly_topic_clos_pk",
+            "columns": ["clo_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "outline_weekly_topics",
+          "columns": [
+            {
+              "name": "details_text",
+              "type": "text",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "outline_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "subject_title",
+              "type": "varchar(255)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "tasks_private_study_text",
+              "type": "text",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "week_date",
+              "type": "date",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "week_no",
+              "type": "tinyint",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "weekly_topic_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "outline_weekly_topics_pk",
+            "columns": ["weekly_topic_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "programs",
+          "columns": [
+            {
+              "name": "degree_level",
+              "type": "enum('undergraduate','masters','phd')",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "department_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "name",
+              "type": "varchar(150)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "program_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "programs_pk",
+            "columns": ["program_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "terms",
+          "columns": [
+            {
+              "name": "academic_year",
+              "type": "varchar(9)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "end_date",
+              "type": "date",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "semester",
+              "type": "enum('fall','spring','summer')",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "start_date",
+              "type": "date",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "term_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "terms_pk",
+            "columns": ["term_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "user_roles",
+          "columns": [
+            {
+              "name": "user_role",
+              "type": "varchar(50)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "user_role_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "user_roles_pk",
+            "columns": ["user_role_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "schema": "public",
+          "table": "users",
+          "columns": [
+            {
+              "name": "created_at",
+              "type": "datetime",
+              "nullable": true,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "email",
+              "type": "varchar(50)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "first_name",
+              "type": "varchar(50)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "last_name",
+              "type": "varchar(50)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "password",
+              "type": "varchar(500)",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "user_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            },
+            {
+              "name": "user_role_id",
+              "type": "int",
+              "nullable": false,
+              "origins": [
+                {
+                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                  "lines": []
+                }
+              ]
+            }
+          ],
+          "uniques": [],
+          "primaryKey": {
+            "name": "users_pk",
+            "columns": ["user_id"],
+            "origins": [
+              {
+                "id": "98006620-7170-46c5-8740-3c9d395729a5",
+                "lines": []
+              }
+            ]
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "name": "course_outline_versions_created_by_user_id_fk",
+          "src": {
+            "table": "public.course_outline_versions",
+            "column": "created_by_user_id"
+          },
+          "ref": {
+            "table": "public.users",
+            "column": "user_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "course_outline_versions_outline_id_fk",
+          "src": {
+            "table": "public.course_outline_versions",
+            "column": "outline_id"
+          },
+          "ref": {
+            "table": "public.course_outlines",
+            "column": "outline_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "course_outlines_assistant_user_id_fk",
+          "src": {
+            "table": "public.course_outlines",
+            "column": "assistant_user_id"
+          },
+          "ref": {
+            "table": "public.users",
+            "column": "user_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "course_outlines_course_id_fk",
+          "src": {
+            "table": "public.course_outlines",
+            "column": "course_id"
+          },
+          "ref": {
+            "table": "public.courses",
+            "column": "course_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "course_outlines_created_by_user_id_fk",
+          "src": {
+            "table": "public.course_outlines",
+            "column": "created_by_user_id"
+          },
+          "ref": {
+            "table": "public.users",
+            "column": "user_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "course_outlines_lecturer_user_id_fk",
+          "src": {
+            "table": "public.course_outlines",
+            "column": "lecturer_user_id"
+          },
+          "ref": {
+            "table": "public.users",
+            "column": "user_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "course_outlines_term_id_fk",
+          "src": {
+            "table": "public.course_outlines",
+            "column": "term_id"
+          },
+          "ref": {
+            "table": "public.terms",
+            "column": "term_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "course_prerequisites_course_id_fk",
+          "src": {
+            "table": "public.course_prerequisites",
+            "column": "course_id"
+          },
+          "ref": {
+            "table": "public.courses",
+            "column": "course_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "course_prerequisites_prerequisite_course_id_fk",
+          "src": {
+            "table": "public.course_prerequisites",
+            "column": "prerequisite_course_id"
+          },
+          "ref": {
+            "table": "public.courses",
+            "column": "course_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "courses_program_id_fk",
+          "src": {
+            "table": "public.courses",
+            "column": "program_id"
+          },
+          "ref": {
+            "table": "public.programs",
+            "column": "program_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "outline_evaluation_processes_outline_id_fk",
+          "src": {
+            "table": "public.outline_evaluation_processes",
+            "column": "outline_id"
+          },
+          "ref": {
+            "table": "public.course_outlines",
+            "column": "outline_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "outline_learning_outcomes_outline_id_fk",
+          "src": {
+            "table": "public.outline_learning_outcomes",
+            "column": "outline_id"
+          },
+          "ref": {
+            "table": "public.course_outlines",
+            "column": "outline_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "outline_policies_outline_id_fk",
+          "src": {
+            "table": "public.outline_policies",
+            "column": "outline_id"
+          },
+          "ref": {
+            "table": "public.course_outlines",
+            "column": "outline_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "outline_reference_links_outline_id_fk",
+          "src": {
+            "table": "public.outline_reference_links",
+            "column": "outline_id"
+          },
+          "ref": {
+            "table": "public.course_outlines",
+            "column": "outline_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "outline_schedule_slots_outline_id_fk",
+          "src": {
+            "table": "public.outline_schedule_slots",
+            "column": "outline_id"
+          },
+          "ref": {
+            "table": "public.course_outlines",
+            "column": "outline_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "outline_weekly_topic_clos_clo_id_fk",
+          "src": {
+            "table": "public.outline_weekly_topic_clos",
+            "column": "clo_id"
+          },
+          "ref": {
+            "table": "public.outline_learning_outcomes",
+            "column": "clo_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "outline_weekly_topic_clos_weekly_topic_id_fk",
+          "src": {
+            "table": "public.outline_weekly_topic_clos",
+            "column": "weekly_topic_id"
+          },
+          "ref": {
+            "table": "public.outline_weekly_topics",
+            "column": "weekly_topic_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "outline_weekly_topics_outline_id_fk",
+          "src": {
+            "table": "public.outline_weekly_topics",
+            "column": "outline_id"
+          },
+          "ref": {
+            "table": "public.course_outlines",
+            "column": "outline_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "programs_department_id_fk",
+          "src": {
+            "table": "public.programs",
+            "column": "department_id"
+          },
+          "ref": {
+            "table": "public.departments",
+            "column": "department_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        },
+        {
+          "name": "users_user_role_id_fk",
+          "src": {
+            "table": "public.users",
+            "column": "user_role_id"
+          },
+          "ref": {
+            "table": "public.user_roles",
+            "column": "user_role_id"
+          },
+          "origins": [
+            {
+              "id": "98006620-7170-46c5-8740-3c9d395729a5",
+              "lines": []
+            }
+          ]
+        }
+      ],
+      "createdAt": 1678741101893,
+      "updatedAt": 1678741101893
+    }
+  ],
+  "usedLayout": "initial layout",
+  "layouts": {
+    "initial layout": {
+      "canvas": {
+        "position": {
+          "left": -30.53125,
+          "top": -1.515625
+        },
+        "zoom": 1
+      },
+      "tables": [],
+      "createdAt": 1678741101893,
+      "updatedAt": 1678741806926
+    }
+  },
+  "settings": {
+    "defaultSchema": "public"
+  },
+  "createdAt": 1678741616995,
+  "updatedAt": 1678741616995,
+  "version": 2
+}

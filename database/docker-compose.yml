@@ -1,0 +1,20 @@
+version: "3.3"
+services:
+  coms-be-db:
+    container_name: coms-be-mysql-db
+    image: mysql:5.7
+    restart: always
+    command: --sql_mode="NO_ENGINE_SUBSTITUTION"
+    environment:
+      MYSQL_DATABASE: "coms_be_db"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password"
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - vol-coms-be-db:/var/lib/mysql
+volumes:
+  vol-coms-be-db:
