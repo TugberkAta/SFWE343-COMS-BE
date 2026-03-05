@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const isEqual = require("lodash/isEqual");
 const sinon = require("sinon");
 const jsonDiff = require("json-diff");
