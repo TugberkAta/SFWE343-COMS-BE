@@ -14,6 +14,8 @@ const router = express.Router();
 // USER MANAGEMENT
 router.post("/login", postLogin);
 
+// test
+
 router.post(
   "/register",
   authentication,
