@@ -32,11 +32,11 @@ const login = async (req, res) => {
       message: "Login successful",
       accessToken
     });
-  } else {
-    return res.status(401).json({
-      message: "Invalid email or password"
-    });
   }
+
+  return res.status(401).json({
+    message: "Invalid email or password"
+  });
 };
 
 module.exports = login;
