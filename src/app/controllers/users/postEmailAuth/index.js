@@ -1,9 +1,9 @@
 const handleAPIError = require("~root/utils/handleAPIError");
-const postEmailAuth = require("./schemas/postEmailAuth");
 const { v4: uuidv4 } = require("uuid");
+const { Resend } = require("resend");
+const postEmailAuth = require("./schemas/postEmailAuth");
 const postEmailAuthQuery = require("./schemas/queries/postEmailAuth");
 
-const { Resend } = require("resend");
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 const postEmailauth = async (req, res) => {
