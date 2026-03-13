@@ -50,19 +50,22 @@ const postEmailauth = async (req, res) => {
       shortcode
     });
 
-    await resend.emails.send({
+    const data = await resend.emails.send({
       from: process.env.EMAIL_FROM,
       to: email,
       subject: "Sign in",
       html: emailTemplate
     });
 
-    return res.status(201).send({
-      email,
-      shortcode,
-      redirectUrl,
-      emailTemplate
-    });
+    if (data.error) {
+      return res
+        .status(data.error.statusCode)
+        .send({ message: data.error.message });
+    }
+
+    return res
+      .status(201)
+      .send({ message: "e-mail has been sent succesfully" });
   } catch (err) {
     return handleAPIError(res, err);
   }
