@@ -8,6 +8,7 @@ const authentication = require("./middlewares/authentication");
 const authorise = require("./middlewares/authorisation");
 const getUserRoles = require("./controllers/users/userRoles");
 const healthcheck = require("./platform/healthcheck");
+const postEmailAuth = require("./controllers/users/postEmailAuth");
 
 const router = express.Router();
 
@@ -20,6 +21,8 @@ router.post(
   authorise({ roles: [ADMIN] }),
   postUser
 );
+
+router.post("/email-auth", postEmailAuth);
 
 router.put("/edit/user", authentication, putUserDetails);
 
