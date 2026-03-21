@@ -214,3 +214,10 @@ CREATE TABLE outline_reference_links(
   UNIQUE (outline_id, link_order),
   FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE user_email_shortcodes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(255) NOT NULL,
+  shortcode VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+); 

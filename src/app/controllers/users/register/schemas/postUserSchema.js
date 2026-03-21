@@ -1,43 +1,27 @@
 const yup = require("yup");
-const selectUserByEmail = require("./queries/selectUserById");
 
 const postUserSchema = yup.object().shape({
   firstName: yup
     .string()
-    .required()
-    .label("First Name")
-    .typeError("First Name must be a number."),
+    .trim()
+    .required("First name is required."),
   lastName: yup
     .string()
-    .required()
-    .label("Last Name")
-    .typeError("Last Name must be a number."),
-  password: yup
-    .string()
-    .min(8)
-    .required()
-    .label("password")
-    .typeError("password must be a number."),
-  userRoleId: yup
-    .number()
-    .required()
-    .label("User Role ID")
-    .typeError("User Role Id must be a number."),
+    .trim()
+    .required("Last name is required."),
   email: yup
     .string()
-    .email()
-    .required()
-    .label("Email")
-    .typeError("Email is invalid.")
-    .test("doesEmailExist", "User account already exists.", function test(
-      email
-    ) {
-      return selectUserByEmail({ email }).then(account => {
-        if (account) {
-          return false;
-        }
-        return true;
-      });
-    })
+    .trim()
+    .email("Email is invalid.")
+    .required("Email is required."),
+  password: yup
+    .string()
+    .required("Password is required.")
+    .min(8, "Password must be at least 8 characters."),
+  shortcode: yup
+    .string()
+    .trim()
+    .required("Shortcode is required.")
 });
+
 module.exports = postUserSchema;
