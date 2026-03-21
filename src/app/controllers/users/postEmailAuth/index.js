@@ -1,18 +1,10 @@
 const handleAPIError = require("~root/utils/handleAPIError");
 const { v4: uuidv4 } = require("uuid");
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 const postEmailAuth = require("./schemas/postEmailAuth");
 const postEmailAuthQuery = require("./schemas/queries/postEmailAuth");
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT),
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS
-  }
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const postEmailAuthHandler = async (req, res) => {
   const { email } = req.body;
@@ -31,7 +23,8 @@ const postEmailAuthHandler = async (req, res) => {
       .replace(/-/g, "")
       .slice(0, 8);
 
-    const redirectUrl = `http://localhost:3000/sign-in?shortcode=${shortcode}`;
+    const appBaseUrl = process.env.APP_BASE_URL || "http://localhost:3000";
+    const redirectUrl = `${appBaseUrl}/sign-in?shortcode=${shortcode}`;
 
     const emailTemplate = `
       <div style="font-family: Arial, sans-serif; padding: 20px;">
@@ -58,12 +51,24 @@ const postEmailAuthHandler = async (req, res) => {
       shortcode
     });
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_FROM,
-      to: email,
-      subject: "Sign in",
+    const payload = {
+      from: process.env.RESEND_FROM_EMAIL || "Acme <onboarding@resend.dev>",
+      to: [email],
+      subject: "Sign in to your account",
       html: emailTemplate
-    });
+    };
+
+    if (process.env.RESEND_REPLY_TO_EMAIL) {
+      payload.replyTo = process.env.RESEND_REPLY_TO_EMAIL;
+    }
+
+    const { error } = await resend.emails.send(payload);
+
+    if (error) {
+      return res.status(502).send({
+        message: error.message || "Unable to send sign-in e-mail"
+      });
+    }
 
     return res.status(201).send({
       message: "E-mail has been sent successfully"
