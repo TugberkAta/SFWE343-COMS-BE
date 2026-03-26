@@ -24,7 +24,7 @@ const postEmailAuthHandler = async (req, res) => {
       .slice(0, 8);
 
     const appBaseUrl = process.env.APP_BASE_URL || "http://localhost:3000";
-    const redirectUrl = `${appBaseUrl}/sign-in?shortcode=${shortcode}`;
+    const redirectUrl = `${appBaseUrl}/sign-in?shortcode=${shortcode}&email=${email}`;
 
     const emailTemplate = `
       <div style="font-family: Arial, sans-serif; padding: 20px;">
