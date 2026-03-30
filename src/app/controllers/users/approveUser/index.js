@@ -16,9 +16,9 @@ const postApproveUser = async (req, res) => {
 
   try {
     await approveUser({ userId, userRoleId, approvedStatus });
-    res.send({ message: "User approval status updated successfully." });
+    return res.send({ message: "User approval status updated successfully." });
   } catch (err) {
-    handleAPIError(res, err);
+    return handleAPIError(res, err);
   }
 };
 
