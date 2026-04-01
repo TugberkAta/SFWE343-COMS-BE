@@ -33,6 +33,7 @@ CREATE TABLE users(
   email VARCHAR(50) NOT NULL UNIQUE,
   password VARCHAR(500) NOT NULL,
   user_role_id int NULL DEFAULT NULL,
+  approved BOOLEAN NOT NULL DEFAULT FALSE,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_role_id) REFERENCES user_roles(user_role_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -220,4 +221,4 @@ CREATE TABLE user_email_shortcodes (
   email VARCHAR(255) NOT NULL,
   shortcode VARCHAR(50) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-); 
+);
