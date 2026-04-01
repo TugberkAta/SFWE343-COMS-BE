@@ -9,6 +9,8 @@ const getUserRoles = require("./controllers/users/userRoles");
 const healthcheck = require("./platform/healthcheck");
 const postEmailAuth = require("./controllers/users/postEmailAuth");
 const postApproveUser = require("./controllers/users/approveUser");
+const getUsersWithNoRole = require("./controllers/users/getUsersWithNoRole");
+const getUsersWithRole = require("./controllers/users/getUsersWithRole");
 
 const router = express.Router();
 
@@ -30,6 +32,20 @@ router.post(
   authentication,
   authorise({ roles: ["admin"] }),
   postApproveUser
+);
+
+router.get(
+  "/users/no-role",
+  authentication,
+  authorise({ roles: ["admin"] }),
+  getUsersWithNoRole
+);
+
+router.get(
+  "/users/with-role",
+  authentication,
+  authorise({ roles: ["admin"] }),
+  getUsersWithRole
 );
 
 module.exports = router;

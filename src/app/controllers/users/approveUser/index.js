@@ -3,7 +3,14 @@ const handleAPIError = require("~root/utils/handleAPIError");
 const postApproveUserSchema = require("./schemas/postApproveUserSchema");
 
 const postApproveUser = async (req, res) => {
+  const { userId: currentUserId } = req.user;
   const { userId, userRoleId, approvedStatus } = req.body;
+
+  if (currentUserId === userId) {
+    return res
+      .status(400)
+      .send({ message: "You cannot update your own role." });
+  }
 
   try {
     await postApproveUserSchema.validate(
