@@ -1,15 +1,17 @@
-const Joi = require("joi");
+const yup = require("yup");
 
-const postApproveUserSchema = Joi.object({
-  userId: Joi.number()
+const postApproveUserSchema = yup.object().shape({
+  userId: yup
+    .number()
     .integer()
     .positive()
-    .required(),
-  userRoleId: Joi.number()
+    .required("User id is required."),
+  userRoleId: yup
+    .number()
     .integer()
     .positive()
-    .required(),
-  approvedStatus: Joi.boolean().required()
+    .required("User role id is required."),
+  approvedStatus: yup.boolean().required("Approved status is required.")
 });
 
 module.exports = postApproveUserSchema;

@@ -5,16 +5,12 @@ const postApproveUserSchema = require("./schemas/postApproveUserSchema");
 const postApproveUser = async (req, res) => {
   const { userId, userRoleId, approvedStatus } = req.body;
 
-  const { error } = postApproveUserSchema.validate({
-    userId,
-    userRoleId,
-    approvedStatus
-  });
-  if (error) {
-    return res.status(400).send({ message: error.details[0].message });
-  }
-
   try {
+    await postApproveUserSchema.validate(
+      { userId, userRoleId, approvedStatus },
+      { abortEarly: false }
+    );
+
     await approveUser({ userId, userRoleId, approvedStatus });
     return res.send({ message: "User approval status updated successfully." });
   } catch (err) {

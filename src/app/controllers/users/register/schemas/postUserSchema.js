@@ -1,27 +1,17 @@
 const yup = require("yup");
 
-const postUserSchema = yup.object().shape({
-  firstName: yup
-    .string()
-    .trim()
-    .required("First name is required."),
-  lastName: yup
-    .string()
-    .trim()
-    .required("Last name is required."),
-  email: yup
-    .string()
-    .trim()
-    .email("Email is invalid.")
-    .required("Email is required."),
-  password: yup
-    .string()
-    .required("Password is required.")
-    .min(8, "Password must be at least 8 characters."),
-  shortcode: yup
-    .string()
-    .trim()
-    .required("Shortcode is required.")
+const postApproveUserSchema = yup.object().shape({
+  userId: yup
+    .number()
+    .integer()
+    .positive()
+    .required("User id is required."),
+  userRoleId: yup
+    .number()
+    .integer()
+    .positive()
+    .required("User role id is required."),
+  approvedStatus: yup.boolean().required("Approved status is required.")
 });
 
-module.exports = postUserSchema;
+module.exports = postApproveUserSchema;
