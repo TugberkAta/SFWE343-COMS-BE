@@ -56,3 +56,8 @@ beforeEach(function configureUsingMochaContext() {
   chaiJestSnapshot.setFilename(`${fileName}.schnap`);
   chaiJestSnapshot.setTestName(testName);
 });
+
+beforeEach(async () => {
+  const { submitQuery } = require("~root/lib/database");
+  await submitQuery`INSERT INTO user_email_shortcodes (email, shortcode) VALUES ('newuser100@test.com', 'new2')`;
+});
