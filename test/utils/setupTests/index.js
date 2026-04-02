@@ -1,4 +1,5 @@
 require("module-alias/register");
+const { submitQuery } = require("~root/lib/database");
 const path = require("path");
 require("dotenv").config({
   path: path.join(__dirname, "../../../.env")
@@ -58,6 +59,5 @@ beforeEach(function configureUsingMochaContext() {
 });
 
 beforeEach(async () => {
-  const { submitQuery } = require("~root/lib/database");
   await submitQuery`INSERT INTO user_email_shortcodes (email, shortcode) VALUES ('newuser100@test.com', 'new2')`;
 });
