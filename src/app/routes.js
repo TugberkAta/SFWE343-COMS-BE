@@ -9,6 +9,7 @@ const getUserRoles = require("./controllers/users/userRoles");
 const healthcheck = require("./platform/healthcheck");
 const postEmailAuth = require("./controllers/users/postEmailAuth");
 const postApproveUser = require("./controllers/users/approveUser");
+const postRejectUser = require("./controllers/users/rejectUser");
 const getUsersWithNoRole = require("./controllers/users/getUsersWithNoRole");
 const getUsersWithRole = require("./controllers/users/getUsersWithRole");
 
@@ -32,6 +33,13 @@ router.post(
   authentication,
   authorise({ roles: ["Admin"] }),
   postApproveUser
+);
+
+router.post(
+  "/reject-user",
+  authentication,
+  authorise({ roles: ["Admin"] }),
+  postRejectUser
 );
 
 router.get(
