@@ -2,6 +2,7 @@ const { submitQuery, camelKeys } = require("~root/lib/database");
 
 const selectUsersWithNoRole = () => submitQuery`
   SELECT
+    user_id,
     first_name,
     last_name,
     email,

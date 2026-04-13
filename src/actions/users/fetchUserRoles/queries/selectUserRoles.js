@@ -1,7 +1,8 @@
 const { submitQuery, camelKeys } = require("~root/lib/database");
 
 const selectUserRoles = () => submitQuery`
-    SELECT 
+    SELECT
+        user_role_id,
         user_role
     FROM user_roles
 `;

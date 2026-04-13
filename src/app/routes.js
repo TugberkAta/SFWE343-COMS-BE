@@ -30,21 +30,21 @@ router.get("/healthcheck", healthcheck);
 router.post(
   "/approve-user",
   authentication,
-  authorise({ roles: ["admin"] }),
+  authorise({ roles: ["Admin"] }),
   postApproveUser
 );
 
 router.get(
   "/users/no-role",
   authentication,
-  authorise({ roles: ["admin"] }),
+  authorise({ roles: ["Admin"] }),
   getUsersWithNoRole
 );
 
 router.get(
   "/users/with-role",
   authentication,
-  authorise({ roles: ["admin"] }),
+  authorise({ roles: ["Admin"] }),
   getUsersWithRole
 );
 
