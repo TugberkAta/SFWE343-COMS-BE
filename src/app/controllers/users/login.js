@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+
 module.exports = async (req, res) => {
   const { email, password } = req.body;
 
@@ -8,7 +9,7 @@ module.exports = async (req, res) => {
     const token = jwt.sign(
       {
         userId: "1",
-        email: email,
+        email,
         userRole: "Admin"
       },
       secret,

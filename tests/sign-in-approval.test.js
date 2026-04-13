@@ -1,5 +1,6 @@
+/* eslint-env jest */
 const request = require("supertest");
-const app = require("../app");
+const app = require("../src/app/index");
 
 describe("Sign In Approval API", () => {
   const adminToken = "YOUR_ADMIN_TOKEN_HERE";
