@@ -1,5 +1,5 @@
 module.exports = async (req, res) => {
-  if (!req.user || req.user.userRole !== "admin") {
+  if (!req.user || req.user.userRole !== "Admin") {
     return res.status(403).json({ error: "Forbidden" });
   }
 

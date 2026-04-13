@@ -1,8 +1,12 @@
-const getUsersWithNoRole = async (req, res) => {
+const getUsersNoRole = async (req, res) => {
   try {
+    const users = await db.query(
+      "SELECT userId, username, email FROM users WHERE userRole IS NULL OR userRole = ''"
+    );
+
     res.status(200).json({
       message: "Users without role retrieved successfully",
-      users: []
+      users: users
     });
   } catch (error) {
     res.status(500).json({
@@ -12,4 +16,4 @@ const getUsersWithNoRole = async (req, res) => {
   }
 };
 
-module.exports = getUsersWithNoRole;
+module.exports = getUsersNoRole;

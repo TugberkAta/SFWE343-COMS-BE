@@ -1,9 +1,12 @@
-module.exports = ({ roles }) => {
-  return (req, res, next) => {
-    if (!req.user || !roles.includes(req.user.userRole)) {
-      return res.status(403).json({ error: "Forbidden" });
-    }
+module.exports = ({ roles }) => (req, res, next) => {
+  console.log(" DEBUG - req.user:", req.user);
+  console.log(" DEBUG - required roles:", roles);
 
-    next();
-  };
+  if (!req.user || !roles.includes(req.user.userRole)) {
+    console.log(" Authorization FAILED");
+    return res.status(403).json({ error: "Forbidden" });
+  }
+
+  console.log(" Authorization SUCCESS");
+  return next();
 };
