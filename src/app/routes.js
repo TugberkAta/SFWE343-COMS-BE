@@ -9,6 +9,7 @@ const getUserRoles = require("./controllers/users/userRoles");
 const healthcheck = require("./platform/healthcheck");
 const postEmailAuth = require("./controllers/users/postEmailAuth");
 const postApproveUser = require("./controllers/users/approveUser");
+const postRejectUser = require("./controllers/users/rejectUser");
 const getUsersWithNoRole = require("./controllers/users/getUsersWithNoRole");
 const getUsersWithRole = require("./controllers/users/getUsersWithRole");
 const { postCourseOutline } = require("./controllers/courseOutline");
@@ -32,21 +33,28 @@ router.get("/healthcheck", healthcheck);
 router.post(
   "/approve-user",
   authentication,
-  authorise({ roles: ["admin"] }),
+  authorise({ roles: ["Admin"] }),
   postApproveUser
+);
+
+router.post(
+  "/reject-user",
+  authentication,
+  authorise({ roles: ["Admin"] }),
+  postRejectUser
 );
 
 router.get(
   "/users/no-role",
   authentication,
-  authorise({ roles: ["admin"] }),
+  authorise({ roles: ["Admin"] }),
   getUsersWithNoRole
 );
 
 router.get(
   "/users/with-role",
   authentication,
-  authorise({ roles: ["admin"] }),
+  authorise({ roles: ["Admin"] }),
   getUsersWithRole
 );
 

@@ -26,9 +26,10 @@ VALUES (5, "Staff Member");
 INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, created_at)
 VALUES (1, "Ahmet", "Akinsql", "ahmet@akinsql.com", SHA2(CONCAT("password","SECRET_SALT"), 224), 1, "2020-11-20 12:00:00");
 INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, created_at)
-VALUES (2, "Joe", "Bloggs","joebloggs@gmail.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, "2020-11-20 12:00:00");
+VALUES (2, "Joe", "Bloggs","joebloggs@gmail.com", SHA2(CONCAT("password","SECRET_SALT"), 224), 2, "2020-11-20 12:00:00");
 INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, created_at)
 VALUES (3, "Jim", "Bloggs" , "jimbloggs@yahoo.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, "2020-11-20 12:00:00");
+
 INSERT INTO departments (code, name)
 VALUES ("CS", "Computer Science");
 
