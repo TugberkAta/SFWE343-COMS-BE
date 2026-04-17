@@ -11,6 +11,8 @@ const postEmailAuth = require("./controllers/users/postEmailAuth");
 const postApproveUser = require("./controllers/users/approveUser");
 const getUsersWithNoRole = require("./controllers/users/getUsersWithNoRole");
 const getUsersWithRole = require("./controllers/users/getUsersWithRole");
+const { postCourseOutline } = require("./controllers/courseOutline");
+const { patchCourseOutline } = require("./controllers/courseOutline/patch");
 
 const router = express.Router();
 
@@ -47,5 +49,10 @@ router.get(
   authorise({ roles: ["admin"] }),
   getUsersWithRole
 );
+
+// COURSE OUTLINE
+router.post("/course-outline", authentication, postCourseOutline);
+
+router.patch("/course-outline/:outlineId", authentication, patchCourseOutline);
 
 module.exports = router;

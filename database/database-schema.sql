@@ -38,14 +38,17 @@ CREATE TABLE users(
   FOREIGN KEY (user_role_id) REFERENCES user_roles(user_role_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-
 DROP TABLE IF EXISTS outline_weekly_topic_clos;
+DROP TABLE IF EXISTS outline_evaluation_item_clos;
 DROP TABLE IF EXISTS outline_weekly_topics;
 DROP TABLE IF EXISTS outline_evaluation_items;
 DROP TABLE IF EXISTS outline_learning_outcomes;
 DROP TABLE IF EXISTS outline_schedule_slots;
 DROP TABLE IF EXISTS outline_policies;
 DROP TABLE IF EXISTS outline_reference_links;
+DROP TABLE IF EXISTS outline_workload_items;
+DROP TABLE IF EXISTS outline_content_items;
+DROP TABLE IF EXISTS outline_objectives;
 DROP TABLE IF EXISTS course_outline_versions;
 DROP TABLE IF EXISTS outline_evaluation_processes;
 DROP TABLE IF EXISTS course_outlines;
@@ -117,7 +120,6 @@ CREATE TABLE course_outlines(
   status ENUM('draft','published','archived') NOT NULL DEFAULT 'draft',
   lecturer_user_id int NOT NULL,
   assistant_user_id int,
-  prerequisites_text TEXT,
   aims_objectives_text TEXT,
   content_text TEXT,
   textbooks_text TEXT,
@@ -131,6 +133,24 @@ CREATE TABLE course_outlines(
   FOREIGN KEY (lecturer_user_id) REFERENCES users(user_id),
   FOREIGN KEY (assistant_user_id) REFERENCES users(user_id),
   FOREIGN KEY (created_by_user_id) REFERENCES users(user_id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE outline_objectives(
+  objective_id int AUTO_INCREMENT PRIMARY KEY,
+  outline_id int NOT NULL,
+  objective_order TINYINT NOT NULL,
+  objective_text TEXT NOT NULL,
+  UNIQUE (outline_id, objective_order),
+  FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE outline_content_items(
+  content_item_id int AUTO_INCREMENT PRIMARY KEY,
+  outline_id int NOT NULL,
+  content_order TINYINT NOT NULL,
+  content_text TEXT NOT NULL,
+  UNIQUE (outline_id, content_order),
+  FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE outline_evaluation_processes(
@@ -214,6 +234,37 @@ CREATE TABLE outline_reference_links(
   url VARCHAR(500) NOT NULL,
   UNIQUE (outline_id, link_order),
   FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE outline_workload_items(
+  workload_item_id int AUTO_INCREMENT PRIMARY KEY,
+  outline_id int NOT NULL,
+  item_order TINYINT NOT NULL,
+  activity_type VARCHAR(100) NOT NULL,
+  learning_activities_weeks TINYINT NOT NULL,
+  duration_hours SMALLINT NOT NULL,
+  UNIQUE (outline_id, item_order),
+  FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE outline_evaluation_items(
+  evaluation_item_id int AUTO_INCREMENT PRIMARY KEY,
+  outline_id int NOT NULL,
+  item_order TINYINT NOT NULL,
+  name VARCHAR(150) NOT NULL,
+  category VARCHAR(100) NOT NULL,
+  weight_percent TINYINT NOT NULL,
+  notes TEXT,
+  UNIQUE (outline_id, item_order),
+  FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE outline_evaluation_item_clos(
+  evaluation_item_id int NOT NULL,
+  clo_id int NOT NULL,
+  PRIMARY KEY (evaluation_item_id, clo_id),
+  FOREIGN KEY (evaluation_item_id) REFERENCES outline_evaluation_items(evaluation_item_id) ON DELETE CASCADE,
+  FOREIGN KEY (clo_id) REFERENCES outline_learning_outcomes(clo_id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE user_email_shortcodes (
