@@ -1,5 +1,5 @@
-const deleteOutlinePolicies = require("./queries/deleteOutlinePolicies");
 const insertOutlinePolicies = require("~root/actions/courseOutline/createOutlinePolicies/queries/insertOutlinePolicies");
+const deleteOutlinePolicies = require("./queries/deleteOutlinePolicies");
 
 const patchOutlinePolicies = async ({ outlineId, policies }) => {
   await deleteOutlinePolicies({ outlineId });

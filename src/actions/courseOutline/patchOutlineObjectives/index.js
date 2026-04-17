@@ -1,5 +1,5 @@
-const deleteOutlineObjectives = require("./queries/deleteOutlineObjectives");
 const insertOutlineObjectives = require("~root/actions/courseOutline/createOutlineObjectives/queries/insertOutlineObjectives");
+const deleteOutlineObjectives = require("./queries/deleteOutlineObjectives");
 
 const patchOutlineObjectives = async ({ outlineId, objectives }) => {
   await deleteOutlineObjectives({ outlineId });

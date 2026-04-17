@@ -1,5 +1,5 @@
-const deleteOutlineWorkloadItems = require("./queries/deleteOutlineWorkloadItems");
 const insertOutlineWorkloadItems = require("~root/actions/courseOutline/createOutlineWorkloadItems/queries/insertOutlineWorkloadItems");
+const deleteOutlineWorkloadItems = require("./queries/deleteOutlineWorkloadItems");
 
 const patchOutlineWorkloadItems = async ({ outlineId, workloadItems }) => {
   await deleteOutlineWorkloadItems({ outlineId });

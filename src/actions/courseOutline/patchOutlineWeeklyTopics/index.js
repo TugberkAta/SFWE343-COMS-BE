@@ -1,5 +1,5 @@
-const deleteOutlineWeeklyTopics = require("./queries/deleteOutlineWeeklyTopics");
 const insertOutlineWeeklyTopics = require("~root/actions/courseOutline/createOutlineWeeklyTopics/queries/insertOutlineWeeklyTopics");
+const deleteOutlineWeeklyTopics = require("./queries/deleteOutlineWeeklyTopics");
 
 const patchOutlineWeeklyTopics = async ({ outlineId, weeklyTopics }) => {
   await deleteOutlineWeeklyTopics({ outlineId });

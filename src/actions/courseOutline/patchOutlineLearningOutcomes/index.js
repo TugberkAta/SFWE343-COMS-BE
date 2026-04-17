@@ -1,5 +1,5 @@
-const deleteOutlineLearningOutcomes = require("./queries/deleteOutlineLearningOutcomes");
 const insertOutlineLearningOutcomes = require("~root/actions/courseOutline/createOutlineLearningOutcomes/queries/insertOutlineLearningOutcomes");
+const deleteOutlineLearningOutcomes = require("./queries/deleteOutlineLearningOutcomes");
 
 const patchOutlineLearningOutcomes = async ({
   outlineId,

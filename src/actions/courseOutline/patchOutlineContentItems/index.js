@@ -1,5 +1,5 @@
-const deleteOutlineContentItems = require("./queries/deleteOutlineContentItems");
 const insertOutlineContentItems = require("~root/actions/courseOutline/createOutlineContentItems/queries/insertOutlineContentItems");
+const deleteOutlineContentItems = require("./queries/deleteOutlineContentItems");
 
 const patchOutlineContentItems = async ({ outlineId, contentItems }) => {
   await deleteOutlineContentItems({ outlineId });

@@ -1,5 +1,5 @@
-const deleteOutlineEvaluationItems = require("./queries/deleteOutlineEvaluationItems");
 const insertOutlineEvaluationItems = require("~root/actions/courseOutline/createOutlineEvaluationItems/queries/insertOutlineEvaluationItems");
+const deleteOutlineEvaluationItems = require("./queries/deleteOutlineEvaluationItems");
 
 const patchOutlineEvaluationItems = async ({ outlineId, evaluationItems }) => {
   await deleteOutlineEvaluationItems({ outlineId });

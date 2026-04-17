@@ -1,5 +1,5 @@
-const deleteOutlineReferenceLinks = require("./queries/deleteOutlineReferenceLinks");
 const insertOutlineReferenceLinks = require("~root/actions/courseOutline/createOutlineReferenceLinks/queries/insertOutlineReferenceLinks");
+const deleteOutlineReferenceLinks = require("./queries/deleteOutlineReferenceLinks");
 
 const patchOutlineReferenceLinks = async ({ outlineId, referenceLinks }) => {
   await deleteOutlineReferenceLinks({ outlineId });
