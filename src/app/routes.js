@@ -12,6 +12,11 @@ const postApproveUser = require("./controllers/users/approveUser");
 const postRejectUser = require("./controllers/users/rejectUser");
 const getUsersWithNoRole = require("./controllers/users/getUsersWithNoRole");
 const getUsersWithRole = require("./controllers/users/getUsersWithRole");
+const getPrograms = require("./controllers/programs/getPrograms");
+const getDepartments = require("./controllers/departments/getDepartments");
+const getOutlines = require("./controllers/courseOutlines/getOutlines");
+const getOutlineById = require("./controllers/courseOutlines/getOutlineById");
+const getOutlinePdfById = require("./controllers/courseOutlines/getOutlinePdfById");
 
 const router = express.Router();
 
@@ -55,5 +60,11 @@ router.get(
   authorise({ roles: ["Admin"] }),
   getUsersWithRole
 );
+
+router.get("/programs", authentication, getPrograms);
+router.get("/departments", authentication, getDepartments);
+router.get("/outlines", authentication, getOutlines);
+router.get("/outlines/:outlineId", authentication, getOutlineById);
+router.get("/outlines/:outlineId/pdf", authentication, getOutlinePdfById);
 
 module.exports = router;
