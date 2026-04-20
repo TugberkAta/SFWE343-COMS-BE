@@ -1,4 +1,4 @@
-const { submitQuery, getFirst } = require("~root/lib/database");
+const { submitQuery, getFirst } = require("../../../../lib/database");
 
 const getUserRole = ({ userId }) => submitQuery`
     SELECT user_role 

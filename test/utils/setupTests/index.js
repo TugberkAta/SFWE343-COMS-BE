@@ -1,4 +1,5 @@
 require("module-alias/register");
+const { submitQuery } = require("~root/lib/database");
 const path = require("path");
 require("dotenv").config({
   path: path.join(__dirname, "../../../.env")
@@ -55,4 +56,8 @@ beforeEach(function configureUsingMochaContext() {
   chaiJestSnapshot.configureUsingMochaContext(this);
   chaiJestSnapshot.setFilename(`${fileName}.schnap`);
   chaiJestSnapshot.setTestName(testName);
+});
+
+beforeEach(async () => {
+  await submitQuery`INSERT INTO user_email_shortcodes (email, shortcode) VALUES ('newuser100@test.com', 'new2')`;
 });
