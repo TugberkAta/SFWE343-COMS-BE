@@ -3,20 +3,18 @@ const updateCourseOutline = require("./queries/updateCourseOutline");
 const patchCourseOutlineBase = async ({
   outlineId,
   status,
+  termId,
   lecturerUserId,
   assistantUserId,
-  aimsObjectivesText,
-  contentText,
   textbooksText,
   additionalReadingText
 }) => {
   await updateCourseOutline({
     outlineId,
     status,
+    termId,
     lecturerUserId,
     assistantUserId,
-    aimsObjectivesText,
-    contentText,
     textbooksText,
     additionalReadingText
   });

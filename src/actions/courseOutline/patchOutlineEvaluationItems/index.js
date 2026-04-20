@@ -2,18 +2,26 @@ const insertOutlineEvaluationItems = require("~root/actions/courseOutline/create
 const deleteOutlineEvaluationItems = require("./queries/deleteOutlineEvaluationItems");
 
 const patchOutlineEvaluationItems = async ({ outlineId, evaluationItems }) => {
+  if (evaluationItems === undefined) {
+    return {};
+  }
+
   await deleteOutlineEvaluationItems({ outlineId });
   const evalMap = {};
-  for (const item of evaluationItems) {
+  for (const [index, item] of evaluationItems.entries()) {
+    const itemOrder = item.itemOrder === undefined ? index + 1 : item.itemOrder;
     const evaluationItemId = await insertOutlineEvaluationItems({
       outlineId,
-      itemOrder: item.itemOrder,
-      name: item.name,
-      category: item.category,
-      weightPercent: item.weightPercent,
+      itemOrder,
+      name: item.name || item.title || "",
+      category: item.category || "other",
+      weightPercent:
+        item.weightPercent === undefined
+          ? item.weight || 0
+          : item.weightPercent,
       notes: item.notes
     });
-    evalMap[item.itemOrder] = { evaluationItemId, clos: item.clos };
+    evalMap[itemOrder] = { evaluationItemId, clos: item.clos || [] };
   }
   return evalMap;
 };

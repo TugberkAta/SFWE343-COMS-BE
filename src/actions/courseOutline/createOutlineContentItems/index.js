@@ -1,11 +1,12 @@
 const insertOutlineContentItems = require("./queries/insertOutlineContentItems");
 
 const createOutlineContentItems = async ({ outlineId, contentItems }) => {
-  for (const item of contentItems) {
+  for (const [index, item] of (contentItems || []).entries()) {
     await insertOutlineContentItems({
       outlineId,
-      contentOrder: item.contentOrder,
-      contentText: item.contentText
+      contentOrder:
+        item.contentOrder === undefined ? index + 1 : item.contentOrder,
+      contentText: item.contentText || item.description || ""
     });
   }
 };

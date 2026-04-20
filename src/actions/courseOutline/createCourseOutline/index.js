@@ -3,12 +3,8 @@ const insertCourseOutline = require("./queries/insertCourseOutline");
 const createCourseOutline = async ({
   courseId,
   termId,
-  versionNo,
-  status,
   lecturerUserId,
   assistantUserId,
-  aimsObjectivesText,
-  contentText,
   textbooksText,
   additionalReadingText,
   createdByUserId
@@ -16,12 +12,8 @@ const createCourseOutline = async ({
   const outlineId = await insertCourseOutline({
     courseId,
     termId,
-    versionNo,
-    status,
     lecturerUserId,
     assistantUserId,
-    aimsObjectivesText,
-    contentText,
     textbooksText,
     additionalReadingText,
     createdByUserId

@@ -1,4 +1,8 @@
-const { submitQuery, getInsertId } = require("~root/lib/database");
+const {
+  submitQuery,
+  getInsertId,
+  sqlValueOrNull
+} = require("~root/lib/database");
 
 const insertOutlineEvaluationItems = ({
   outlineId,
@@ -21,7 +25,7 @@ const insertOutlineEvaluationItems = ({
     ${name},
     ${category},
     ${weightPercent},
-    ${notes}
+    ${sqlValueOrNull(notes)}
   )
 `;
 

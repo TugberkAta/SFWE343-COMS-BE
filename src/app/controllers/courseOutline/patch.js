@@ -15,10 +15,9 @@ const patchCourseOutline = async (req, res) => {
   const { outlineId } = req.params;
   const {
     status,
+    termId,
     lecturerUserId,
     assistantUserId,
-    aimsObjectivesText,
-    contentText,
     textbooksText,
     additionalReadingText,
     objectives,
@@ -35,10 +34,9 @@ const patchCourseOutline = async (req, res) => {
     await patchCourseOutlineBase({
       outlineId,
       status,
+      termId,
       lecturerUserId,
       assistantUserId,
-      aimsObjectivesText,
-      contentText,
       textbooksText,
       additionalReadingText
     });

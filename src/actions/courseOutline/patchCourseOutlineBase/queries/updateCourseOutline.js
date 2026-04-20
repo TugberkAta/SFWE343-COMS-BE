@@ -1,24 +1,54 @@
-const { submitQuery } = require("~root/lib/database");
+const { submitQuery, sql, sqlReduce } = require("~root/lib/database");
+
+const NO_UPDATE = Symbol("NO_UPDATE");
 
 const updateCourseOutline = ({
   outlineId,
-  status,
-  lecturerUserId,
-  assistantUserId,
-  aimsObjectivesText,
-  contentText,
-  textbooksText,
-  additionalReadingText
-}) => submitQuery`
-  UPDATE course_outlines SET
-    status = ${status},
-    lecturer_user_id = ${lecturerUserId},
-    assistant_user_id = ${assistantUserId},
-    aims_objectives_text = ${aimsObjectivesText},
-    content_text = ${contentText},
-    textbooks_text = ${textbooksText},
-    additional_reading_text = ${additionalReadingText}
-  WHERE outline_id = ${outlineId}
-`;
+  status = NO_UPDATE,
+  termId = NO_UPDATE,
+  lecturerUserId = NO_UPDATE,
+  assistantUserId = NO_UPDATE,
+  textbooksText = NO_UPDATE,
+  additionalReadingText = NO_UPDATE
+}) => {
+  const updates = [];
+
+  if (status !== NO_UPDATE) {
+    updates.push(sql`status = ${status}`);
+  }
+
+  if (termId !== NO_UPDATE) {
+    updates.push(sql`term_id = ${termId}`);
+  }
+
+  if (lecturerUserId !== NO_UPDATE) {
+    updates.push(sql`lecturer_user_id = ${lecturerUserId}`);
+  }
+
+  if (assistantUserId !== NO_UPDATE) {
+    updates.push(sql`assistant_user_id = ${assistantUserId}`);
+  }
+
+  if (textbooksText !== NO_UPDATE) {
+    updates.push(sql`textbooks_text = ${textbooksText}`);
+  }
+
+  if (additionalReadingText !== NO_UPDATE) {
+    updates.push(sql`additional_reading_text = ${additionalReadingText}`);
+  }
+
+  if (updates.length !== 0) {
+    return submitQuery`
+      UPDATE
+        course_outlines
+      SET
+        ${updates.reduce(sqlReduce)}
+      WHERE
+        outline_id = ${outlineId}
+    `;
+  }
+
+  return Promise.resolve();
+};
 
 module.exports = updateCourseOutline;

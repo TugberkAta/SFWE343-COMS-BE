@@ -1,11 +1,11 @@
 const insertOutlineReferenceLinks = require("./queries/insertOutlineReferenceLinks");
 
 const createOutlineReferenceLinks = async ({ outlineId, referenceLinks }) => {
-  for (const link of referenceLinks) {
+  for (const [index, link] of (referenceLinks || []).entries()) {
     await insertOutlineReferenceLinks({
       outlineId,
-      linkOrder: link.linkOrder,
-      label: link.label,
+      linkOrder: link.linkOrder === undefined ? index + 1 : link.linkOrder,
+      label: link.label || link.title || "",
       url: link.url
     });
   }

@@ -13,7 +13,7 @@ INSERT INTO `migrations` (
 
 -- YOU CAN MODIFY BELOW THIS LINE
 INSERT INTO user_roles (user_role_id, user_role)
-VALUES (1, "admin");
+VALUES (1, "Admin");
 INSERT INTO user_roles (user_role_id, user_role)
 VALUES (2, "Quality Assurance - Head");
 INSERT INTO user_roles (user_role_id, user_role)
@@ -253,16 +253,20 @@ INSERT INTO course_prerequisites (course_id, prerequisite_course_id) VALUES (76,
 INSERT INTO course_prerequisites (course_id, prerequisite_course_id) VALUES (77, 11);
 
 INSERT INTO terms (term_id, academic_year, semester, start_date, end_date)
-VALUES (1, "2025-2026", "spring", "2026-02-16", "2026-06-12");
+VALUES (1, "2024-2025", "fall", "2024-09-16", "2025-01-10");
+INSERT INTO terms (term_id, academic_year, semester, start_date, end_date)
+VALUES (2, "2024-2025", "spring", "2025-02-17", "2025-06-13");
+INSERT INTO terms (term_id, academic_year, semester, start_date, end_date)
+VALUES (3, "2025-2026", "fall", "2025-09-15", "2026-01-09");
+INSERT INTO terms (term_id, academic_year, semester, start_date, end_date)
+VALUES (4, "2025-2026", "spring", "2026-02-16", "2026-06-12");
 
 INSERT INTO course_outlines (
   outline_id, course_id, term_id, version_no, status, lecturer_user_id, assistant_user_id,
-  aims_objectives_text, content_text, textbooks_text, additional_reading_text,
+  textbooks_text, additional_reading_text,
   created_by_user_id, created_at, updated_at
 ) VALUES (
-  1, 30, 1, 1, "published", 1, null,
-  "1. Provide theoretical foundation and practical skills for software requirements analysis, UML-based system design, and project management in software development. 2. Enable effective team collaboration, development of functioning software applications, and production of professional documentation for technical and non-technical audiences.",
-  "Systems roles and development methodologies; organizational system modeling; project management; interactive and unobtrusive information gathering; agile modeling, prototyping, and scrum; data flow diagrams; object-oriented analysis and UML; output and input design; database design choices and normalization; HCI and UX design; software evolution; security engineering; project submission and presentation.",
+  1, 30, 4, 1, "published", 1, null,
   "System Analysis and Design, 11th Edition, Julie E. Kendall and Kenneth E. Kendall.",
   "Course pack prepared by the instructor.",
   1, "2026-02-10 09:00:00", "2026-02-10 09:00:00"
@@ -324,16 +328,16 @@ INSERT INTO outline_evaluation_items (
   evaluation_item_id, outline_id, item_order, name, category, weight_percent, notes
 ) VALUES (5, 1, 5, "Final Exam", "final", 30.00, "Initial seed distribution for SFWE343 outline.");
 
-INSERT INTO outline_learning_outcomes (clo_id, outline_id, clo_number, domain, statement)
-VALUES (1, 1, 1, "knowledge", "Explain and evaluate the role, responsibilities, and required skills of the system analyst in software development projects.");
-INSERT INTO outline_learning_outcomes (clo_id, outline_id, clo_number, domain, statement)
-VALUES (2, 1, 2, "skill", "Gather, analyze, and document software requirements using appropriate techniques and prepare a comprehensive Software Requirements Specification (SRS).");
-INSERT INTO outline_learning_outcomes (clo_id, outline_id, clo_number, domain, statement)
-VALUES (3, 1, 3, "skill", "Apply UML modeling techniques (e.g., use case, activity, class, sequence, state chart, package, deployment diagrams) to represent and refine software design.");
-INSERT INTO outline_learning_outcomes (clo_id, outline_id, clo_number, domain, statement)
-VALUES (4, 1, 4, "competency", "Collaborate in teams to design and implement a functioning software application, demonstrating project management practices and leadership in a development environment.");
-INSERT INTO outline_learning_outcomes (clo_id, outline_id, clo_number, domain, statement)
-VALUES (5, 1, 5, "competency", "Produce professional project documentation that communicates design decisions, implementation details, and evaluation results clearly to technical and non-technical audiences.");
+INSERT INTO outline_learning_outcomes (clo_id, outline_id, clo_number, statement)
+VALUES (1, 1, 1, "Explain and evaluate the role, responsibilities, and required skills of the system analyst in software development projects.");
+INSERT INTO outline_learning_outcomes (clo_id, outline_id, clo_number, statement)
+VALUES (2, 1, 2, "Gather, analyze, and document software requirements using appropriate techniques and prepare a comprehensive Software Requirements Specification (SRS).");
+INSERT INTO outline_learning_outcomes (clo_id, outline_id, clo_number, statement)
+VALUES (3, 1, 3, "Apply UML modeling techniques (e.g., use case, activity, class, sequence, state chart, package, deployment diagrams) to represent and refine software design.");
+INSERT INTO outline_learning_outcomes (clo_id, outline_id, clo_number, statement)
+VALUES (4, 1, 4, "Collaborate in teams to design and implement a functioning software application, demonstrating project management practices and leadership in a development environment.");
+INSERT INTO outline_learning_outcomes (clo_id, outline_id, clo_number, statement)
+VALUES (5, 1, 5, "Produce professional project documentation that communicates design decisions, implementation details, and evaluation results clearly to technical and non-technical audiences.");
 
 INSERT INTO outline_weekly_topics (weekly_topic_id, outline_id, week_no, subject_title, details_text, tasks_private_study_text)
 VALUES (1, 1, 1, "Systems, Roles, and Development Methodologies", "Understand the need for systems analysis and design in organizations; comprehend the fundamentals of the systems development life cycle.", "Application: PowerPoint Slides.");

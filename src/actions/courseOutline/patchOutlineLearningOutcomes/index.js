@@ -5,14 +5,17 @@ const patchOutlineLearningOutcomes = async ({
   outlineId,
   learningOutcomes
 }) => {
+  if (learningOutcomes === undefined) {
+    return {};
+  }
+
   await deleteOutlineLearningOutcomes({ outlineId });
   const cloMap = {};
-  for (const clo of learningOutcomes) {
+  for (const [index, clo] of learningOutcomes.entries()) {
     const cloId = await insertOutlineLearningOutcomes({
       outlineId,
-      cloNumber: clo.cloNumber,
-      domain: clo.domain,
-      statement: clo.statement
+      cloNumber: clo.cloNumber === undefined ? index + 1 : clo.cloNumber,
+      statement: clo.statement || clo.description || ""
     });
     cloMap[clo.cloNumber] = cloId;
   }

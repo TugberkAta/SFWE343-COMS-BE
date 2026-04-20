@@ -2,6 +2,10 @@ const insertOutlineWeeklyTopics = require("~root/actions/courseOutline/createOut
 const deleteOutlineWeeklyTopics = require("./queries/deleteOutlineWeeklyTopics");
 
 const patchOutlineWeeklyTopics = async ({ outlineId, weeklyTopics }) => {
+  if (weeklyTopics === undefined) {
+    return {};
+  }
+
   await deleteOutlineWeeklyTopics({ outlineId });
   const topicMap = {};
   for (const topic of weeklyTopics) {

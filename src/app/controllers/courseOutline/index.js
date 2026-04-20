@@ -9,18 +9,19 @@ const createOutlineReferenceLinks = require("~root/actions/courseOutline/createO
 const createOutlineWorkloadItems = require("~root/actions/courseOutline/createOutlineWorkloadItems");
 const createOutlineEvaluationItems = require("~root/actions/courseOutline/createOutlineEvaluationItems");
 const createOutlineEvaluationItemClos = require("~root/actions/courseOutline/createOutlineEvaluationItemClos");
+const {
+  startTransaction,
+  commitTransaction,
+  rollbackTransaction
+} = require("~root/lib/database");
 const handleAPIError = require("~root/utils/handleAPIError");
 
 const postCourseOutline = async (req, res) => {
   const {
     courseId,
     termId,
-    versionNo,
-    status,
     lecturerUserId,
     assistantUserId,
-    aimsObjectivesText,
-    contentText,
     textbooksText,
     additionalReadingText,
     createdByUserId,
@@ -34,16 +35,16 @@ const postCourseOutline = async (req, res) => {
     evaluationItems
   } = req.body;
 
+  let transactionStarted = false;
   try {
+    await startTransaction();
+    transactionStarted = true;
+
     const { outlineId } = await createCourseOutline({
       courseId,
       termId,
-      versionNo,
-      status,
       lecturerUserId,
       assistantUserId,
-      aimsObjectivesText,
-      contentText,
       textbooksText,
       additionalReadingText,
       createdByUserId
@@ -73,8 +74,13 @@ const postCourseOutline = async (req, res) => {
     });
     await createOutlineEvaluationItemClos({ evalMap, cloMap });
 
+    await commitTransaction();
+    transactionStarted = false;
     return res.status(201).send({ outlineId });
   } catch (err) {
+    if (transactionStarted) {
+      await rollbackTransaction();
+    }
     return handleAPIError(res, err);
   }
 };
