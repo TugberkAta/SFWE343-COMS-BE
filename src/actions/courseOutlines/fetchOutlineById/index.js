@@ -11,8 +11,6 @@ const selectOutlineById = getFirst(
       co.status,
       co.lecturer_user_id,
       co.assistant_user_id,
-      co.aims_objectives_text,
-      co.content_text,
       co.textbooks_text,
       co.additional_reading_text,
       co.created_by_user_id,
@@ -58,7 +56,7 @@ const selectOutlineContentItems = camelKeys(
 
 const selectOutlineLearningOutcomes = camelKeys(
   outlineId => submitQuery`
-  SELECT clo_id, clo_number, domain, statement
+  SELECT clo_id, clo_number, statement
   FROM outline_learning_outcomes
   WHERE outline_id = ${outlineId}
   ORDER BY clo_number ASC

@@ -100,8 +100,6 @@ CREATE TABLE course_outlines(
   status ENUM('draft','published','archived') NOT NULL DEFAULT 'draft',
   lecturer_user_id int NOT NULL,
   assistant_user_id int,
-  aims_objectives_text TEXT,
-  content_text TEXT,
   textbooks_text TEXT,
   additional_reading_text TEXT,
   created_by_user_id int NOT NULL,
@@ -192,7 +190,6 @@ CREATE TABLE outline_learning_outcomes(
   clo_id int AUTO_INCREMENT PRIMARY KEY,
   outline_id int NOT NULL,
   clo_number TINYINT NOT NULL,
-  domain ENUM('knowledge','skill','competency'),
   statement TEXT NOT NULL,
   UNIQUE (outline_id, clo_number),
   FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE

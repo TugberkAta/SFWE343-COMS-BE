@@ -118,30 +118,8 @@
               ]
             },
             {
-              "name": "aims_objectives_text",
-              "type": "text",
-              "nullable": true,
-              "origins": [
-                {
-                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
-                  "lines": []
-                }
-              ]
-            },
-            {
               "name": "assistant_user_id",
               "type": "int",
-              "nullable": true,
-              "origins": [
-                {
-                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
-                  "lines": []
-                }
-              ]
-            },
-            {
-              "name": "content_text",
-              "type": "text",
               "nullable": true,
               "origins": [
                 {
@@ -710,17 +688,6 @@
               "name": "clo_number",
               "type": "tinyint",
               "nullable": false,
-              "origins": [
-                {
-                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
-                  "lines": []
-                }
-              ]
-            },
-            {
-              "name": "domain",
-              "type": "enum('knowledge','skill','competency')",
-              "nullable": true,
               "origins": [
                 {
                   "id": "98006620-7170-46c5-8740-3c9d395729a5",
