@@ -136,6 +136,7 @@
     "mysql2": "^3.9.7",
     "oauth": "^0.9.15",
     "objects-to-csv": "^1.3.6",
+    "pdfkit": "^0.18.0",
     "qs": "^6.8.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
