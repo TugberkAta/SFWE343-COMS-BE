@@ -14,19 +14,71 @@ INSERT INTO `migrations` (
 -- YOU CAN MODIFY BELOW THIS LINE
 INSERT INTO user_roles (user_role_id, user_role)
 VALUES (1, "Admin");
-INSERT INTO user_roles (user_role_id, user_role)
-VALUES (2, "Quality Assurance - Head");
-INSERT INTO user_roles (user_role_id, user_role)
-VALUES (3, "Quality Assurance - Committee");
-INSERT INTO user_roles (user_role_id, user_role)
-VALUES (4, "Program Leader");
-INSERT INTO user_roles (user_role_id, user_role)
-VALUES (5, "Staff Member");
+
+INSERT INTO user_types (user_type_id, type_name, permissions_json)
+VALUES (
+  1,
+  "quality_assurance_head",
+  JSON_ARRAY(
+    "outlines.read",
+    "outlines.edit",
+    "outlines.download",
+    "programs.read",
+    "departments.read",
+    "courses.read",
+    "terms.read"
+  )
+);
+
+INSERT INTO user_types (user_type_id, type_name, permissions_json)
+VALUES (
+  2,
+  "quality_assurance_committee",
+  JSON_ARRAY(
+    "outlines.read",
+    "outlines.download",
+    "programs.read",
+    "departments.read",
+    "courses.read",
+    "terms.read"
+  )
+);
+
+INSERT INTO user_types (user_type_id, type_name, permissions_json)
+VALUES (
+  3,
+  "program_leader",
+  JSON_ARRAY(
+    "outlines.read",
+    "outlines.edit",
+    "outlines.download",
+    "programs.read",
+    "departments.read",
+    "courses.read",
+    "terms.read"
+  )
+);
+
+INSERT INTO user_types (user_type_id, type_name, permissions_json)
+VALUES (
+  4,
+  "staff_member",
+  JSON_ARRAY(
+    "outlines.read",
+    "outlines.write",
+    "outlines.edit",
+    "outlines.download",
+    "programs.read",
+    "departments.read",
+    "courses.read",
+    "terms.read"
+  )
+);
 
 INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, created_at)
 VALUES (1, "Ahmet", "Akinsql", "ahmet@akinsql.com", SHA2(CONCAT("password","SECRET_SALT"), 224), 1, "2020-11-20 12:00:00");
 INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, created_at)
-VALUES (2, "Joe", "Bloggs","joebloggs@gmail.com", SHA2(CONCAT("password","SECRET_SALT"), 224), 2, "2020-11-20 12:00:00");
+VALUES (2, "Joe", "Bloggs","joebloggs@gmail.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, "2020-11-20 12:00:00");
 INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, created_at)
 VALUES (3, "Jim", "Bloggs" , "jimbloggs@yahoo.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, "2020-11-20 12:00:00");
 

@@ -25,6 +25,13 @@ CREATE TABLE user_roles(
   user_role VARCHAR(50) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS user_types;
+CREATE TABLE user_types(
+  user_type_id int AUTO_INCREMENT PRIMARY KEY,
+  type_name VARCHAR(100) NOT NULL UNIQUE,
+  permissions_json JSON NOT NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 DROP TABLE IF EXISTS users;
 CREATE TABLE users(
   user_id int AUTO_INCREMENT PRIMARY KEY,
