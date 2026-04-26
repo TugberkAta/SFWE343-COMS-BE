@@ -4,7 +4,6 @@ const insertCourseOutline = ({
   courseId,
   termId,
   lecturerUserId,
-  assistantUserId,
   textbooksText,
   additionalReadingText,
   createdByUserId
@@ -13,7 +12,6 @@ const insertCourseOutline = ({
     course_id,
     term_id,
     lecturer_user_id,
-    assistant_user_id,
     textbooks_text,
     additional_reading_text,
     created_by_user_id
@@ -21,7 +19,6 @@ const insertCourseOutline = ({
     ${courseId},
     ${termId},
     ${lecturerUserId},
-    ${assistantUserId},
     ${textbooksText},
     ${additionalReadingText},
     ${createdByUserId}

@@ -5,7 +5,6 @@ const patchCourseOutlineBase = async ({
   status,
   termId,
   lecturerUserId,
-  assistantUserId,
   textbooksText,
   additionalReadingText
 }) => {
@@ -14,7 +13,6 @@ const patchCourseOutlineBase = async ({
     status,
     termId,
     lecturerUserId,
-    assistantUserId,
     textbooksText,
     additionalReadingText
   });

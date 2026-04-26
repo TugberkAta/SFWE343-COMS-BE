@@ -4,7 +4,6 @@ const createCourseOutline = async ({
   courseId,
   termId,
   lecturerUserId,
-  assistantUserId,
   textbooksText,
   additionalReadingText,
   createdByUserId
@@ -13,7 +12,6 @@ const createCourseOutline = async ({
     courseId,
     termId,
     lecturerUserId,
-    assistantUserId,
     textbooksText,
     additionalReadingText,
     createdByUserId

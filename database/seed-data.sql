@@ -314,15 +314,20 @@ INSERT INTO terms (term_id, academic_year, semester, start_date, end_date)
 VALUES (4, "2025-2026", "spring", "2026-02-16", "2026-06-12");
 
 INSERT INTO course_outlines (
-  outline_id, course_id, term_id, version_no, status, lecturer_user_id, assistant_user_id,
+  outline_id, course_id, term_id, version_no, status, lecturer_user_id,
   textbooks_text, additional_reading_text,
   created_by_user_id, created_at, updated_at
 ) VALUES (
-  1, 30, 4, 1, "published", 1, null,
+  1, 30, 4, 1, "published", 1,
   "System Analysis and Design, 11th Edition, Julie E. Kendall and Kenneth E. Kendall.",
   "Course pack prepared by the instructor.",
   1, "2026-02-10 09:00:00", "2026-02-10 09:00:00"
 );
+
+INSERT INTO outline_assistants (outline_id, assistant_user_id)
+VALUES (1, 2);
+INSERT INTO outline_assistants (outline_id, assistant_user_id)
+VALUES (1, 3);
 
 INSERT INTO outline_objectives (objective_id, outline_id, objective_order, objective_text)
 VALUES (1, 1, 1, "To provide students with the theoretical foundation and practical skills necessary for analyzing software requirements, modeling system design with UML, and applying project management principles in software development.");

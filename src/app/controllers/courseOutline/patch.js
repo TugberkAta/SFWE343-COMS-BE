@@ -9,6 +9,7 @@ const patchOutlineReferenceLinks = require("~root/actions/courseOutline/patchOut
 const patchOutlineWorkloadItems = require("~root/actions/courseOutline/patchOutlineWorkloadItems");
 const patchOutlineEvaluationItems = require("~root/actions/courseOutline/patchOutlineEvaluationItems");
 const patchOutlineEvaluationItemClos = require("~root/actions/courseOutline/patchOutlineEvaluationItemClos");
+const patchOutlineAssistants = require("~root/actions/courseOutline/patchOutlineAssistants");
 const handleAPIError = require("~root/utils/handleAPIError");
 
 const patchCourseOutline = async (req, res) => {
@@ -17,7 +18,7 @@ const patchCourseOutline = async (req, res) => {
     status,
     termId,
     lecturerUserId,
-    assistantUserId,
+    assistantUserIds,
     textbooksText,
     additionalReadingText,
     objectives,
@@ -29,6 +30,9 @@ const patchCourseOutline = async (req, res) => {
     workloadItems,
     evaluationItems
   } = req.body;
+  const normalizedAssistantUserIds = Array.isArray(assistantUserIds)
+    ? assistantUserIds
+    : undefined;
 
   try {
     await patchCourseOutlineBase({
@@ -36,9 +40,12 @@ const patchCourseOutline = async (req, res) => {
       status,
       termId,
       lecturerUserId,
-      assistantUserId,
       textbooksText,
       additionalReadingText
+    });
+    await patchOutlineAssistants({
+      outlineId,
+      assistantUserIds: normalizedAssistantUserIds
     });
 
     await patchOutlineObjectives({ outlineId, objectives });

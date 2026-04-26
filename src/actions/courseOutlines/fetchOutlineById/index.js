@@ -10,7 +10,6 @@ const selectOutlineById = getFirst(
       co.version_no,
       co.status,
       co.lecturer_user_id,
-      co.assistant_user_id,
       co.textbooks_text,
       co.additional_reading_text,
       co.created_by_user_id,
@@ -42,6 +41,15 @@ const selectOutlineObjectives = camelKeys(
   FROM outline_objectives
   WHERE outline_id = ${outlineId}
   ORDER BY objective_order ASC
+`
+);
+
+const selectOutlineAssistants = camelKeys(
+  outlineId => submitQuery`
+  SELECT assistant_user_id
+  FROM outline_assistants
+  WHERE outline_id = ${outlineId}
+  ORDER BY assistant_user_id ASC
 `
 );
 
@@ -164,6 +172,7 @@ const fetchOutlineById = async ({ outlineId }) => {
 
   const [
     objectives,
+    assistants,
     contentItems,
     learningOutcomes,
     weeklyTopics,
@@ -176,6 +185,7 @@ const fetchOutlineById = async ({ outlineId }) => {
     prerequisiteCourseCodes
   ] = await Promise.all([
     selectOutlineObjectives(outlineId),
+    selectOutlineAssistants(outlineId),
     selectOutlineContentItems(outlineId),
     selectOutlineLearningOutcomes(outlineId),
     selectOutlineWeeklyTopics(outlineId),
@@ -208,6 +218,7 @@ const fetchOutlineById = async ({ outlineId }) => {
 
   return {
     ...outline,
+    assistantUserIds: assistants.map(item => item.assistantUserId),
     objectives,
     contentItems,
     learningOutcomes,

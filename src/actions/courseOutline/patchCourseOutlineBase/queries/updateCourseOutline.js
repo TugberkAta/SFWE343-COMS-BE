@@ -7,7 +7,6 @@ const updateCourseOutline = ({
   status = NO_UPDATE,
   termId = NO_UPDATE,
   lecturerUserId = NO_UPDATE,
-  assistantUserId = NO_UPDATE,
   textbooksText = NO_UPDATE,
   additionalReadingText = NO_UPDATE
 }) => {
@@ -23,10 +22,6 @@ const updateCourseOutline = ({
 
   if (lecturerUserId !== NO_UPDATE) {
     updates.push(sql`lecturer_user_id = ${lecturerUserId}`);
-  }
-
-  if (assistantUserId !== NO_UPDATE) {
-    updates.push(sql`assistant_user_id = ${assistantUserId}`);
   }
 
   if (textbooksText !== NO_UPDATE) {

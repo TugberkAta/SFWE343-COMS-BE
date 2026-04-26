@@ -9,6 +9,7 @@ const createOutlineReferenceLinks = require("~root/actions/courseOutline/createO
 const createOutlineWorkloadItems = require("~root/actions/courseOutline/createOutlineWorkloadItems");
 const createOutlineEvaluationItems = require("~root/actions/courseOutline/createOutlineEvaluationItems");
 const createOutlineEvaluationItemClos = require("~root/actions/courseOutline/createOutlineEvaluationItemClos");
+const createOutlineAssistants = require("~root/actions/courseOutline/createOutlineAssistants");
 const {
   startTransaction,
   commitTransaction,
@@ -21,7 +22,7 @@ const postCourseOutline = async (req, res) => {
     courseId,
     termId,
     lecturerUserId,
-    assistantUserId,
+    assistantUserIds,
     textbooksText,
     additionalReadingText,
     createdByUserId,
@@ -34,6 +35,9 @@ const postCourseOutline = async (req, res) => {
     workloadItems,
     evaluationItems
   } = req.body;
+  const normalizedAssistantUserIds = Array.isArray(assistantUserIds)
+    ? assistantUserIds
+    : [];
 
   let transactionStarted = false;
   try {
@@ -44,10 +48,14 @@ const postCourseOutline = async (req, res) => {
       courseId,
       termId,
       lecturerUserId,
-      assistantUserId,
       textbooksText,
       additionalReadingText,
       createdByUserId
+    });
+
+    await createOutlineAssistants({
+      outlineId,
+      assistantUserIds: normalizedAssistantUserIds
     });
 
     await createOutlineObjectives({ outlineId, objectives });

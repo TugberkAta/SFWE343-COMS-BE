@@ -106,7 +106,6 @@ CREATE TABLE course_outlines(
   version_no int NOT NULL DEFAULT 1,
   status ENUM('draft','published','archived') NOT NULL DEFAULT 'draft',
   lecturer_user_id int NOT NULL,
-  assistant_user_id int,
   textbooks_text TEXT,
   additional_reading_text TEXT,
   created_by_user_id int NOT NULL,
@@ -116,8 +115,15 @@ CREATE TABLE course_outlines(
   FOREIGN KEY (course_id) REFERENCES courses(course_id),
   FOREIGN KEY (term_id) REFERENCES terms(term_id),
   FOREIGN KEY (lecturer_user_id) REFERENCES users(user_id),
-  FOREIGN KEY (assistant_user_id) REFERENCES users(user_id),
   FOREIGN KEY (created_by_user_id) REFERENCES users(user_id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE outline_assistants(
+  outline_id int NOT NULL,
+  assistant_user_id int NOT NULL,
+  PRIMARY KEY (outline_id, assistant_user_id),
+  FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE,
+  FOREIGN KEY (assistant_user_id) REFERENCES users(user_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE outline_objectives(
