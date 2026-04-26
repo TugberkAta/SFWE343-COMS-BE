@@ -16,6 +16,7 @@ const {
   rollbackTransaction
 } = require("~root/lib/database");
 const handleAPIError = require("~root/utils/handleAPIError");
+const postCourseOutlineSchema = require("./schemas/postCourseOutlineSchema");
 
 const postCourseOutline = async (req, res) => {
   const {
@@ -41,6 +42,11 @@ const postCourseOutline = async (req, res) => {
 
   let transactionStarted = false;
   try {
+    await postCourseOutlineSchema.validate(
+      { learningOutcomes },
+      { abortEarly: false }
+    );
+
     await startTransaction();
     transactionStarted = true;
 

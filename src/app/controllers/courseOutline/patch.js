@@ -11,6 +11,7 @@ const patchOutlineEvaluationItems = require("~root/actions/courseOutline/patchOu
 const patchOutlineEvaluationItemClos = require("~root/actions/courseOutline/patchOutlineEvaluationItemClos");
 const patchOutlineAssistants = require("~root/actions/courseOutline/patchOutlineAssistants");
 const handleAPIError = require("~root/utils/handleAPIError");
+const patchCourseOutlineSchema = require("./schemas/patchCourseOutlineSchema");
 
 const patchCourseOutline = async (req, res) => {
   const { outlineId } = req.params;
@@ -35,6 +36,11 @@ const patchCourseOutline = async (req, res) => {
     : undefined;
 
   try {
+    await patchCourseOutlineSchema.validate(
+      { learningOutcomes },
+      { abortEarly: false }
+    );
+
     await patchCourseOutlineBase({
       outlineId,
       status,
