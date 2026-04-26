@@ -24,6 +24,138 @@ const parseApplication = text =>
     .replace(/^Application:\s*/i, "")
     .trim();
 
+const normalizeRichTextHtml = text => {
+  let normalized = String(text || "");
+
+  normalized = normalized.replace(/\r\n/g, "\n");
+  normalized = normalized.replace(/<br\s*\/?>/gi, "\n");
+
+  normalized = normalized.replace(/<ol[^>]*>([\s\S]*?)<\/ol>/gi, (_, body) => {
+    let index = 0;
+    return body.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, (__, itemBody) => {
+      index += 1;
+      return `${index}. ${itemBody}\n`;
+    });
+  });
+
+  normalized = normalized.replace(/<ul[^>]*>([\s\S]*?)<\/ul>/gi, (_, body) =>
+    body.replace(
+      /<li[^>]*>([\s\S]*?)<\/li>/gi,
+      (__, itemBody) => `• ${itemBody}\n`
+    )
+  );
+
+  normalized = normalized.replace(/<\/p>/gi, "\n");
+  normalized = normalized.replace(/<p[^>]*>/gi, "");
+  normalized = normalized.replace(/<\/?span[^>]*>/gi, "");
+  normalized = normalized.replace(/<\/?div[^>]*>/gi, "");
+  normalized = normalized.replace(/<\/?u[^>]*>/gi, "");
+  normalized = normalized.replace(/&nbsp;/gi, " ");
+  normalized = normalized.replace(/&amp;/gi, "&");
+  normalized = normalized.replace(/&lt;/gi, "<");
+  normalized = normalized.replace(/&gt;/gi, ">");
+  normalized = normalized.replace(/<\/?(?!strong|b|em|i)[^>]+>/gi, "");
+  normalized = normalized.replace(/\n{3,}/g, "\n\n");
+
+  return normalized.trim();
+};
+
+const tokenizeRichText = text => {
+  const normalized = normalizeRichTextHtml(text);
+  const parts = normalized.split(/(<\/?(?:strong|b|em|i)>)/gi);
+
+  return parts
+    .filter(part => part !== "")
+    .map(part => {
+      const lower = part.toLowerCase();
+
+      if (lower === "<strong>" || lower === "<b>") {
+        return { type: "tag", tag: "bold-open" };
+      }
+      if (lower === "</strong>" || lower === "</b>") {
+        return { type: "tag", tag: "bold-close" };
+      }
+      if (lower === "<em>" || lower === "<i>") {
+        return { type: "tag", tag: "italic-open" };
+      }
+      if (lower === "</em>" || lower === "</i>") {
+        return { type: "tag", tag: "italic-close" };
+      }
+
+      return { type: "text", value: part };
+    });
+};
+
+const getFontName = ({ isBold, isItalic }) => {
+  if (isBold && isItalic) return "Helvetica-BoldOblique";
+  if (isBold) return "Helvetica-Bold";
+  if (isItalic) return "Helvetica-Oblique";
+  return "Helvetica";
+};
+
+const renderRichText = (
+  doc,
+  { text, x, y, width, fontSize = 10, draw = true, color = "#000000" }
+) => {
+  const tokens = tokenizeRichText(text);
+  const lineHeight = fontSize * 1.35;
+  let cursorX = x;
+  let cursorY = y;
+  let isBold = false;
+  let isItalic = false;
+
+  const maxX = x + width;
+  const newLine = () => {
+    cursorX = x;
+    cursorY += lineHeight;
+  };
+
+  const drawWord = word => {
+    if (word === "") return;
+
+    const fontName = getFontName({ isBold, isItalic });
+    doc.font(fontName).fontSize(fontSize);
+    const wordWidth = doc.widthOfString(word);
+
+    if (cursorX !== x && cursorX + wordWidth > maxX) {
+      newLine();
+    }
+
+    if (draw) {
+      doc.fillColor(color).text(word, cursorX, cursorY, { lineBreak: false });
+    }
+    cursorX += wordWidth;
+  };
+
+  tokens.forEach(token => {
+    if (token.type === "tag") {
+      if (token.tag === "bold-open") isBold = true;
+      if (token.tag === "bold-close") isBold = false;
+      if (token.tag === "italic-open") isItalic = true;
+      if (token.tag === "italic-close") isItalic = false;
+      return;
+    }
+
+    const lines = token.value.split("\n");
+    lines.forEach((line, lineIndex) => {
+      const chunks = line.split(/(\s+)/).filter(Boolean);
+
+      chunks.forEach(chunk => {
+        if (/^\s+$/.test(chunk) && cursorX === x) {
+          return;
+        }
+        drawWord(chunk);
+      });
+
+      if (lineIndex < lines.length - 1) {
+        newLine();
+      }
+    });
+  });
+
+  return Math.max(lineHeight, cursorY - y + lineHeight);
+};
+
 const renderSectionBar = (doc, text, y) => {
   const x = PAGE.left;
   const width = doc.page.width - PAGE.left - PAGE.right;
@@ -53,12 +185,22 @@ const renderTable = (
     const font = isHeader ? "Helvetica-Bold" : "Helvetica";
     const size = isHeader ? 10.5 : 10;
     return cells.reduce((max, cell, index) => {
-      const h = doc
-        .font(font)
-        .fontSize(size)
-        .heightOfString(String(safeText(cell)), {
-          width: colWidths[index] - padding * 2
-        });
+      const cellText = String(safeText(cell));
+      const h = isHeader
+        ? doc
+            .font(font)
+            .fontSize(size)
+            .heightOfString(cellText, {
+              width: colWidths[index] - padding * 2
+            })
+        : renderRichText(doc, {
+            text: cellText,
+            x: 0,
+            y: 0,
+            width: colWidths[index] - padding * 2,
+            fontSize: size,
+            draw: false
+          });
       return Math.max(max, h + padding * 2);
     }, 18);
   };
@@ -82,13 +224,24 @@ const renderTable = (
           .fill(fillColor)
           .restore();
       doc.rect(x, y, w, rowHeight).stroke(COLORS.border);
-      doc
-        .font(isHeader ? "Helvetica-Bold" : "Helvetica")
-        .fontSize(isHeader ? 10.5 : 10)
-        .fillColor("#000000")
-        .text(String(safeText(cell)), x + padding, y + padding, {
-          width: w - padding * 2
+      if (isHeader) {
+        doc
+          .font("Helvetica-Bold")
+          .fontSize(10.5)
+          .fillColor("#000000")
+          .text(String(safeText(cell)), x + padding, y + padding, {
+            width: w - padding * 2
+          });
+      } else {
+        renderRichText(doc, {
+          text: String(safeText(cell)),
+          x: x + padding,
+          y: y + padding,
+          width: w - padding * 2,
+          fontSize: 10,
+          draw: true
         });
+      }
       x += w;
     });
     y += rowHeight;
