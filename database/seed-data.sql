@@ -446,12 +446,12 @@ INSERT INTO outline_weekly_topic_clos (weekly_topic_id, clo_id) VALUES (14, 5);
 INSERT INTO outline_weekly_topic_clos (weekly_topic_id, clo_id) VALUES (15, 4);
 INSERT INTO outline_weekly_topic_clos (weekly_topic_id, clo_id) VALUES (15, 5);
 
-INSERT INTO outline_policies (policy_id, outline_id, policy_order, title, body_text)
-VALUES (1, 1, 1, "Attendance", "Students are expected to attend all classes, studio/lab sessions, and project meetings unless excused.");
-INSERT INTO outline_policies (policy_id, outline_id, policy_order, title, body_text)
-VALUES (2, 1, 2, "Academic Integrity", "All submissions must be original. Plagiarism and unauthorized collaboration are handled under university regulations.");
-INSERT INTO outline_policies (policy_id, outline_id, policy_order, title, body_text)
-VALUES (3, 1, 3, "Project Work", "Project milestones and final presentations must be submitted on time. Team contribution is expected and may be individually reviewed.");
+INSERT INTO outline_policies (policy_id, policy_order, title, body_text)
+VALUES (1, 1, "Attendance", "Students are expected to attend all classes, studio/lab sessions, and project meetings unless excused.");
+INSERT INTO outline_policies (policy_id, policy_order, title, body_text)
+VALUES (2, 2, "Academic Integrity", "All submissions must be original. Plagiarism and unauthorized collaboration are handled under university regulations.");
+INSERT INTO outline_policies (policy_id, policy_order, title, body_text)
+VALUES (3, 3, "Project Work", "Project milestones and final presentations must be submitted on time. Team contribution is expected and may be individually reviewed.");
 
-INSERT INTO outline_reference_links (reference_link_id, outline_id, link_order, label, url)
-VALUES (1, 1, 1, "Course Specification (SFWE343)", "https://fiu.edu.tr/");
+INSERT INTO outline_reference_links (reference_link_id, link_order, label, url)
+VALUES (1, 1, "Course Specification (SFWE343)", "https://fiu.edu.tr/");

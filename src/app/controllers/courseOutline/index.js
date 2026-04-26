@@ -72,8 +72,8 @@ const postCourseOutline = async (req, res) => {
     });
     await createOutlineWeeklyTopicClos({ topicMap, cloMap });
 
-    await createOutlinePolicies({ outlineId, policies });
-    await createOutlineReferenceLinks({ outlineId, referenceLinks });
+    await createOutlinePolicies({ policies });
+    await createOutlineReferenceLinks({ referenceLinks });
     await createOutlineWorkloadItems({ outlineId, workloadItems });
 
     const evalMap = await createOutlineEvaluationItems({

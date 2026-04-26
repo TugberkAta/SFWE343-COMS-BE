@@ -62,8 +62,8 @@ const patchCourseOutline = async (req, res) => {
     });
     await patchOutlineWeeklyTopicClos({ topicMap, cloMap });
 
-    await patchOutlinePolicies({ outlineId, policies });
-    await patchOutlineReferenceLinks({ outlineId, referenceLinks });
+    await patchOutlinePolicies({ policies });
+    await patchOutlineReferenceLinks({ referenceLinks });
     await patchOutlineWorkloadItems({ outlineId, workloadItems });
 
     const evalMap = await patchOutlineEvaluationItems({

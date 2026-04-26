@@ -1,7 +1,7 @@
 const { submitQuery } = require("~root/lib/database");
 
-const deleteOutlinePolicies = ({ outlineId }) => submitQuery`
-  DELETE FROM outline_policies WHERE outline_id = ${outlineId}
+const deleteOutlinePolicies = () => submitQuery`
+  DELETE FROM outline_policies
 `;
 
 module.exports = deleteOutlinePolicies;

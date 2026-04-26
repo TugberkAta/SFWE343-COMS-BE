@@ -95,19 +95,17 @@ const selectOutlineWeeklyTopicClos = camelKeys(
 );
 
 const selectOutlinePolicies = camelKeys(
-  outlineId => submitQuery`
+  () => submitQuery`
   SELECT policy_id, policy_order, title, body_text
   FROM outline_policies
-  WHERE outline_id = ${outlineId}
   ORDER BY policy_order ASC
 `
 );
 
 const selectOutlineReferenceLinks = camelKeys(
-  outlineId => submitQuery`
+  () => submitQuery`
   SELECT reference_link_id, link_order, label, url
   FROM outline_reference_links
-  WHERE outline_id = ${outlineId}
   ORDER BY link_order ASC
 `
 );
@@ -190,8 +188,8 @@ const fetchOutlineById = async ({ outlineId }) => {
     selectOutlineLearningOutcomes(outlineId),
     selectOutlineWeeklyTopics(outlineId),
     selectOutlineWeeklyTopicClos(outlineId),
-    selectOutlinePolicies(outlineId),
-    selectOutlineReferenceLinks(outlineId),
+    selectOutlinePolicies(),
+    selectOutlineReferenceLinks(),
     selectOutlineWorkloadItems(outlineId),
     selectOutlineEvaluationItems(outlineId),
     selectOutlineEvaluationItemClos(outlineId),

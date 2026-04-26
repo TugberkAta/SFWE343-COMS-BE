@@ -238,22 +238,18 @@ CREATE TABLE outline_weekly_topic_clos(
 
 CREATE TABLE outline_policies(
   policy_id int AUTO_INCREMENT PRIMARY KEY,
-  outline_id int NOT NULL,
   policy_order TINYINT NOT NULL,
   title VARCHAR(150) NOT NULL,
   body_text TEXT NOT NULL,
-  UNIQUE (outline_id, policy_order),
-  FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
+  UNIQUE (policy_order)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE outline_reference_links(
   reference_link_id int AUTO_INCREMENT PRIMARY KEY,
-  outline_id int NOT NULL,
   link_order TINYINT NOT NULL,
   label VARCHAR(150) NOT NULL,
   url VARCHAR(500) NOT NULL,
-  UNIQUE (outline_id, link_order),
-  FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
+  UNIQUE (link_order)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE user_email_shortcodes (
