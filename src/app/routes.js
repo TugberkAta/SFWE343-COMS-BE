@@ -1,5 +1,6 @@
 const express = require("express");
 
+const { ENDPOINT_PERMISSIONS } = require("~root/constants/endpointPermissions");
 const postLogin = require("./controllers/users/login");
 const postUser = require("./controllers/users/register");
 const putUserDetails = require("./controllers/users/putUserDetails");
@@ -18,7 +19,6 @@ const {
   putUserType,
   removeUserType
 } = require("./controllers/userTypes");
-const { ENDPOINT_PERMISSIONS } = require("~root/constants/endpointPermissions");
 
 const router = express.Router();
 
