@@ -59,6 +59,15 @@ CREATE TABLE programs(
   FOREIGN KEY (department_id) REFERENCES departments(department_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+CREATE TABLE program_learning_outcomes(
+  plo_id int AUTO_INCREMENT PRIMARY KEY,
+  program_id int NOT NULL,
+  plo_number TINYINT NOT NULL,
+  statement TEXT NOT NULL,
+  UNIQUE (program_id, plo_number),
+  FOREIGN KEY (program_id) REFERENCES programs(program_id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 CREATE TABLE terms(
   term_id int AUTO_INCREMENT PRIMARY KEY,
   academic_year VARCHAR(9) NOT NULL,
@@ -108,6 +117,8 @@ CREATE TABLE course_outlines(
   lecturer_user_id int NOT NULL,
   textbooks_text TEXT,
   additional_reading_text TEXT,
+  office_hours VARCHAR(255),
+  office_code VARCHAR(100),
   created_by_user_id int NOT NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

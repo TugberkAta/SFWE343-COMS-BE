@@ -12,6 +12,8 @@ const selectOutlineById = getFirst(
       co.lecturer_user_id,
       co.textbooks_text,
       co.additional_reading_text,
+      co.office_hours,
+      co.office_code,
       co.created_by_user_id,
       co.created_at,
       co.updated_at,
@@ -164,6 +166,17 @@ const selectOutlinePrerequisiteCourseCodes = camelKeys(
 `
 );
 
+const selectProgramLearningOutcomes = camelKeys(
+  outlineId => submitQuery`
+  SELECT plo_id, plo_number, statement
+  FROM program_learning_outcomes plo
+  JOIN courses c ON c.program_id = plo.program_id
+  JOIN course_outlines co ON co.course_id = c.course_id
+  WHERE co.outline_id = ${outlineId}
+  ORDER BY plo_number ASC
+`
+);
+
 const fetchOutlineById = async ({ outlineId }) => {
   const outline = await selectOutlineById(outlineId);
   if (!outline) return null;
@@ -180,7 +193,8 @@ const fetchOutlineById = async ({ outlineId }) => {
     workloadItems,
     evaluationItems,
     evaluationItemClos,
-    prerequisiteCourseCodes
+    prerequisiteCourseCodes,
+    programLearningOutcomes
   ] = await Promise.all([
     selectOutlineObjectives(outlineId),
     selectOutlineAssistants(outlineId),
@@ -193,7 +207,8 @@ const fetchOutlineById = async ({ outlineId }) => {
     selectOutlineWorkloadItems(outlineId),
     selectOutlineEvaluationItems(outlineId),
     selectOutlineEvaluationItemClos(outlineId),
-    selectOutlinePrerequisiteCourseCodes(outlineId)
+    selectOutlinePrerequisiteCourseCodes(outlineId),
+    selectProgramLearningOutcomes(outlineId)
   ]);
 
   const cloMapByTopicId = weeklyTopicClos.reduce((acc, item) => {
@@ -228,6 +243,7 @@ const fetchOutlineById = async ({ outlineId }) => {
     referenceLinks,
     workloadItems,
     prerequisiteCourseCodes: prerequisiteCourseCodes.map(item => item.code),
+    programLearningOutcomes,
     evaluationItems: evaluationItems.map(item => ({
       ...item,
       clos: cloMapByEvaluationItemId[item.evaluationItemId] || []

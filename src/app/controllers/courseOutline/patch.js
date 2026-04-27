@@ -22,6 +22,8 @@ const patchCourseOutline = async (req, res) => {
     assistantUserIds,
     textbooksText,
     additionalReadingText,
+    officeHours,
+    officeCode,
     objectives,
     contentItems,
     learningOutcomes,
@@ -47,7 +49,9 @@ const patchCourseOutline = async (req, res) => {
       termId,
       lecturerUserId,
       textbooksText,
-      additionalReadingText
+      additionalReadingText,
+      officeHours,
+      officeCode
     });
     await patchOutlineAssistants({
       outlineId,

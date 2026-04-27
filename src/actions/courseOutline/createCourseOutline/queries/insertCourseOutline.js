@@ -6,6 +6,8 @@ const insertCourseOutline = ({
   lecturerUserId,
   textbooksText,
   additionalReadingText,
+  officeHours,
+  officeCode,
   createdByUserId
 }) => submitQuery`
   INSERT INTO course_outlines (
@@ -14,6 +16,8 @@ const insertCourseOutline = ({
     lecturer_user_id,
     textbooks_text,
     additional_reading_text,
+    office_hours,
+    office_code,
     created_by_user_id
   ) VALUES (
     ${courseId},
@@ -21,6 +25,8 @@ const insertCourseOutline = ({
     ${lecturerUserId},
     ${textbooksText},
     ${additionalReadingText},
+    ${officeHours},
+    ${officeCode},
     ${createdByUserId}
   )
 `;

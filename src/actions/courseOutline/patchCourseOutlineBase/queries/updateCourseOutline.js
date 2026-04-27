@@ -8,7 +8,9 @@ const updateCourseOutline = ({
   termId = NO_UPDATE,
   lecturerUserId = NO_UPDATE,
   textbooksText = NO_UPDATE,
-  additionalReadingText = NO_UPDATE
+  additionalReadingText = NO_UPDATE,
+  officeHours = NO_UPDATE,
+  officeCode = NO_UPDATE
 }) => {
   const updates = [];
 
@@ -30,6 +32,14 @@ const updateCourseOutline = ({
 
   if (additionalReadingText !== NO_UPDATE) {
     updates.push(sql`additional_reading_text = ${additionalReadingText}`);
+  }
+
+  if (officeHours !== NO_UPDATE) {
+    updates.push(sql`office_hours = ${officeHours}`);
+  }
+
+  if (officeCode !== NO_UPDATE) {
+    updates.push(sql`office_code = ${officeCode}`);
   }
 
   if (updates.length !== 0) {

@@ -186,6 +186,27 @@ VALUES (35, 9, "Pharmacy", "Turkish");
 INSERT INTO programs (program_id, department_id, name, language)
 VALUES (36, 9, "Pharmacy", "English");
 
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (1, 11, 1, "Apply advanced mathematics, science, and engineering fundamentals to analyse and solve complex computer engineering problems.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (2, 11, 2, "Integrate and evaluate knowledge from current and emerging technologies to identify, formulate, and investigate complex engineering problems through systematic inquiry.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (3, 11, 3, "Design and develop innovative engineering solutions, taking into account health, safety, legal, cultural, societal, and environmental sustainability factors.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (4, 11, 4, "Select and utilize modern engineering tools, software, and techniques effectively, with an awareness of their applicability and limitations.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (5, 11, 5, "Assess and interpret the societal, environmental, and ethical implications of engineering solutions, applying professional judgment in decision-making.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (6, 11, 6, "Demonstrate ethical conduct, professional responsibility, and adherence to recognized standards and codes in engineering practice.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (7, 11, 7, "Work independently and collaborate effectively in multidisciplinary and multicultural teams, demonstrating leadership and responsibility in achieving shared goals.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (8, 11, 8, "Communicate effectively with peers, professionals, and society at large through technical reports, documentation, presentations, and clear instructions.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (9, 11, 9, "Plan, manage, and execute engineering projects using sound principles of project management, organization, and leadership in diverse environments.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (10, 11, 10, "Engage in autonomous lifelong learning by maintaining coding proficiency, applying advanced research methods, and adapting to technological advancements to ensure continuous professional growth.");
+
 INSERT INTO courses (
   course_id, program_id, code, name, language, course_level_text, category,
   theory_hours, tutorial_hours, lab_hours, local_credits, ects_credits
@@ -315,12 +336,14 @@ VALUES (4, "2025-2026", "spring", "2026-02-16", "2026-06-12");
 
 INSERT INTO course_outlines (
   outline_id, course_id, term_id, version_no, status, lecturer_user_id,
-  textbooks_text, additional_reading_text,
+  textbooks_text, additional_reading_text, office_hours, office_code,
   created_by_user_id, created_at, updated_at
 ) VALUES (
   1, 30, 4, 1, "published", 1,
   "System Analysis and Design, 11th Edition, Julie E. Kendall and Kenneth E. Kendall.",
   "Course pack prepared by the instructor.",
+  "Monday 13:00-15:00",
+  "ENG-B204",
   1, "2026-02-10 09:00:00", "2026-02-10 09:00:00"
 );
 

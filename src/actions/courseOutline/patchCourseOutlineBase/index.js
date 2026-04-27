@@ -6,7 +6,9 @@ const patchCourseOutlineBase = async ({
   termId,
   lecturerUserId,
   textbooksText,
-  additionalReadingText
+  additionalReadingText,
+  officeHours,
+  officeCode
 }) => {
   await updateCourseOutline({
     outlineId,
@@ -14,7 +16,9 @@ const patchCourseOutlineBase = async ({
     termId,
     lecturerUserId,
     textbooksText,
-    additionalReadingText
+    additionalReadingText,
+    officeHours,
+    officeCode
   });
 };
 
