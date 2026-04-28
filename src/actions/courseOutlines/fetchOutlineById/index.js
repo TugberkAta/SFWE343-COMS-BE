@@ -10,6 +10,9 @@ const selectOutlineById = getFirst(
       co.version_no,
       co.status,
       co.lecturer_user_id,
+      lu.first_name AS lecturer_first_name,
+      lu.last_name AS lecturer_last_name,
+      lu.email AS lecturer_email,
       co.textbooks_text,
       co.additional_reading_text,
       co.office_hours,
@@ -32,6 +35,7 @@ const selectOutlineById = getFirst(
     FROM course_outlines co
     JOIN courses c ON c.course_id = co.course_id
     JOIN terms t ON t.term_id = co.term_id
+    JOIN users lu ON lu.user_id = co.lecturer_user_id
     WHERE co.outline_id = ${outlineId}
   `
   )
@@ -48,10 +52,15 @@ const selectOutlineObjectives = camelKeys(
 
 const selectOutlineAssistants = camelKeys(
   outlineId => submitQuery`
-  SELECT assistant_user_id
-  FROM outline_assistants
+  SELECT
+    oa.assistant_user_id,
+    u.first_name,
+    u.last_name,
+    u.email
+  FROM outline_assistants oa
+  JOIN users u ON u.user_id = oa.assistant_user_id
   WHERE outline_id = ${outlineId}
-  ORDER BY assistant_user_id ASC
+  ORDER BY oa.assistant_user_id ASC
 `
 );
 
@@ -133,6 +142,7 @@ const selectOutlineEvaluationItems = camelKeys(
     item_order,
     name,
     category,
+    \`count\`,
     weight_percent,
     notes
   FROM outline_evaluation_items
@@ -231,7 +241,19 @@ const fetchOutlineById = async ({ outlineId }) => {
 
   return {
     ...outline,
+    lecturer: {
+      userId: outline.lecturerUserId,
+      firstName: outline.lecturerFirstName,
+      lastName: outline.lecturerLastName,
+      email: outline.lecturerEmail
+    },
     assistantUserIds: assistants.map(item => item.assistantUserId),
+    assistants: assistants.map(item => ({
+      userId: item.assistantUserId,
+      firstName: item.firstName,
+      lastName: item.lastName,
+      email: item.email
+    })),
     objectives,
     contentItems,
     learningOutcomes,

@@ -393,20 +393,20 @@ INSERT INTO outline_workload_items (
 ) VALUES (7, 1, 7, "Preparation for Final Exam", 0, 0);
 
 INSERT INTO outline_evaluation_items (
-  evaluation_item_id, outline_id, item_order, name, category, weight_percent, notes
-) VALUES (1, 1, 1, "Quiz", "quiz", 5.00, "Initial seed distribution for SFWE343 outline.");
+  evaluation_item_id, outline_id, item_order, name, category, `count`, weight_percent, notes
+) VALUES (1, 1, 1, "Quiz", "quiz", 1, 5.00, "Initial seed distribution for SFWE343 outline.");
 INSERT INTO outline_evaluation_items (
-  evaluation_item_id, outline_id, item_order, name, category, weight_percent, notes
-) VALUES (2, 1, 2, "Homework / Assignments", "assignment", 15.00, "Initial seed distribution for SFWE343 outline.");
+  evaluation_item_id, outline_id, item_order, name, category, `count`, weight_percent, notes
+) VALUES (2, 1, 2, "Homework / Assignments", "assignment", 3, 15.00, "Initial seed distribution for SFWE343 outline.");
 INSERT INTO outline_evaluation_items (
-  evaluation_item_id, outline_id, item_order, name, category, weight_percent, notes
-) VALUES (3, 1, 3, "Software Development Project", "project", 30.00, "Initial seed distribution for SFWE343 outline.");
+  evaluation_item_id, outline_id, item_order, name, category, `count`, weight_percent, notes
+) VALUES (3, 1, 3, "Software Development Project", "project", 1, 30.00, "Initial seed distribution for SFWE343 outline.");
 INSERT INTO outline_evaluation_items (
-  evaluation_item_id, outline_id, item_order, name, category, weight_percent, notes
-) VALUES (4, 1, 4, "Midterm Exam", "midterm", 20.00, "Initial seed distribution for SFWE343 outline.");
+  evaluation_item_id, outline_id, item_order, name, category, `count`, weight_percent, notes
+) VALUES (4, 1, 4, "Midterm Exam", "midterm", 1, 20.00, "Initial seed distribution for SFWE343 outline.");
 INSERT INTO outline_evaluation_items (
-  evaluation_item_id, outline_id, item_order, name, category, weight_percent, notes
-) VALUES (5, 1, 5, "Final Exam", "final", 30.00, "Initial seed distribution for SFWE343 outline.");
+  evaluation_item_id, outline_id, item_order, name, category, `count`, weight_percent, notes
+) VALUES (5, 1, 5, "Final Exam", "final", 1, 30.00, "Initial seed distribution for SFWE343 outline.");
 
 INSERT INTO outline_learning_outcomes (clo_id, outline_id, clo_number, statement)
 VALUES (1, 1, 1, "Explain and evaluate the role, responsibilities, and required skills of the system analyst in software development projects.");

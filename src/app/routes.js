@@ -21,6 +21,7 @@ const getTerms = require("./controllers/terms/getTerms");
 const getOutlines = require("./controllers/courseOutlines/getOutlines");
 const getOutlineById = require("./controllers/courseOutlines/getOutlineById");
 const getOutlinePdfById = require("./controllers/courseOutlines/getOutlinePdfById");
+const getCourseSpecificationPdfById = require("./controllers/courseOutlines/getCourseSpecificationPdfById");
 const deleteOutlineById = require("./controllers/courseOutlines/deleteOutlineById");
 
 const router = express.Router();
@@ -78,6 +79,11 @@ router.get("/terms", authentication, getTerms);
 router.get("/outlines", authentication, getOutlines);
 router.get("/outlines/:outlineId", authentication, getOutlineById);
 router.get("/outlines/:outlineId/pdf", authentication, getOutlinePdfById);
+router.get(
+  "/outlines/:outlineId/specification-pdf",
+  authentication,
+  getCourseSpecificationPdfById
+);
 router.delete("/outlines/:outlineId", authentication, deleteOutlineById);
 
 module.exports = router;

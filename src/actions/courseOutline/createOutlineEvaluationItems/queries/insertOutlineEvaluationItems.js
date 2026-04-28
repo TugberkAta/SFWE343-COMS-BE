@@ -9,6 +9,7 @@ const insertOutlineEvaluationItems = ({
   itemOrder,
   name,
   category,
+  count,
   weightPercent,
   notes
 }) => submitQuery`
@@ -17,6 +18,7 @@ const insertOutlineEvaluationItems = ({
     item_order,
     name,
     category,
+    \`count\`,
     weight_percent,
     notes
   ) VALUES (
@@ -24,6 +26,7 @@ const insertOutlineEvaluationItems = ({
     ${itemOrder},
     ${name},
     ${category},
+    ${count},
     ${weightPercent},
     ${sqlValueOrNull(notes)}
   )

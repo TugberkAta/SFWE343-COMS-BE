@@ -182,6 +182,7 @@ CREATE TABLE outline_evaluation_items(
   item_order TINYINT NOT NULL,
   name VARCHAR(120) NOT NULL,
   category ENUM('midterm','final','quiz','assignment','project','lab','participation','other') NOT NULL DEFAULT 'other',
+  `count` TINYINT NOT NULL DEFAULT 1,
   weight_percent DECIMAL(5,2) NOT NULL,
   notes TEXT,
   UNIQUE (outline_id, item_order),
