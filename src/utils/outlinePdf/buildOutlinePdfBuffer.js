@@ -11,6 +11,8 @@ const COLORS = {
 const PAGE = { left: 45, right: 45, top: 36, bottom: 36 };
 const BANNER_PATH = path.join(__dirname, "../../public/final-banner.png");
 const FOOTER_RESERVED_HEIGHT = 54;
+const SECTION_BAR_HEIGHT = 24;
+const EMAIL_REGEX = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i;
 const safeText = value => (value === null || value === undefined ? "-" : value);
 
 const toTitleCase = text =>
@@ -24,10 +26,142 @@ const parseApplication = text =>
     .replace(/^Application:\s*/i, "")
     .trim();
 
+const normalizeRichTextHtml = text => {
+  let normalized = String(text || "");
+
+  normalized = normalized.replace(/\r\n/g, "\n");
+  normalized = normalized.replace(/<br\s*\/?>/gi, "\n");
+
+  normalized = normalized.replace(/<ol[^>]*>([\s\S]*?)<\/ol>/gi, (_, body) => {
+    let index = 0;
+    return body.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, (__, itemBody) => {
+      index += 1;
+      return `${index}. ${itemBody}\n`;
+    });
+  });
+
+  normalized = normalized.replace(/<ul[^>]*>([\s\S]*?)<\/ul>/gi, (_, body) =>
+    body.replace(
+      /<li[^>]*>([\s\S]*?)<\/li>/gi,
+      (__, itemBody) => `• ${itemBody}\n`
+    )
+  );
+
+  normalized = normalized.replace(/<\/p>/gi, "\n");
+  normalized = normalized.replace(/<p[^>]*>/gi, "");
+  normalized = normalized.replace(/<\/?span[^>]*>/gi, "");
+  normalized = normalized.replace(/<\/?div[^>]*>/gi, "");
+  normalized = normalized.replace(/<\/?u[^>]*>/gi, "");
+  normalized = normalized.replace(/&nbsp;/gi, " ");
+  normalized = normalized.replace(/&amp;/gi, "&");
+  normalized = normalized.replace(/&lt;/gi, "<");
+  normalized = normalized.replace(/&gt;/gi, ">");
+  normalized = normalized.replace(/<\/?(?!strong|b|em|i)[^>]+>/gi, "");
+  normalized = normalized.replace(/\n{3,}/g, "\n\n");
+
+  return normalized.trim();
+};
+
+const tokenizeRichText = text => {
+  const normalized = normalizeRichTextHtml(text);
+  const parts = normalized.split(/(<\/?(?:strong|b|em|i)>)/gi);
+
+  return parts
+    .filter(part => part !== "")
+    .map(part => {
+      const lower = part.toLowerCase();
+
+      if (lower === "<strong>" || lower === "<b>") {
+        return { type: "tag", tag: "bold-open" };
+      }
+      if (lower === "</strong>" || lower === "</b>") {
+        return { type: "tag", tag: "bold-close" };
+      }
+      if (lower === "<em>" || lower === "<i>") {
+        return { type: "tag", tag: "italic-open" };
+      }
+      if (lower === "</em>" || lower === "</i>") {
+        return { type: "tag", tag: "italic-close" };
+      }
+
+      return { type: "text", value: part };
+    });
+};
+
+const getFontName = ({ isBold, isItalic }) => {
+  if (isBold && isItalic) return "Helvetica-BoldOblique";
+  if (isBold) return "Helvetica-Bold";
+  if (isItalic) return "Helvetica-Oblique";
+  return "Helvetica";
+};
+
+const renderRichText = (
+  doc,
+  { text, x, y, width, fontSize = 10, draw = true, color = "#000000" }
+) => {
+  const tokens = tokenizeRichText(text);
+  const lineHeight = fontSize * 1.35;
+  let cursorX = x;
+  let cursorY = y;
+  let isBold = false;
+  let isItalic = false;
+
+  const maxX = x + width;
+  const newLine = () => {
+    cursorX = x;
+    cursorY += lineHeight;
+  };
+
+  const drawWord = word => {
+    if (word === "") return;
+
+    const fontName = getFontName({ isBold, isItalic });
+    doc.font(fontName).fontSize(fontSize);
+    const wordWidth = doc.widthOfString(word);
+
+    if (cursorX !== x && cursorX + wordWidth > maxX) {
+      newLine();
+    }
+
+    if (draw) {
+      doc.fillColor(color).text(word, cursorX, cursorY, { lineBreak: false });
+    }
+    cursorX += wordWidth;
+  };
+
+  tokens.forEach(token => {
+    if (token.type === "tag") {
+      if (token.tag === "bold-open") isBold = true;
+      if (token.tag === "bold-close") isBold = false;
+      if (token.tag === "italic-open") isItalic = true;
+      if (token.tag === "italic-close") isItalic = false;
+      return;
+    }
+
+    const lines = token.value.split("\n");
+    lines.forEach((line, lineIndex) => {
+      const chunks = line.split(/(\s+)/).filter(Boolean);
+
+      chunks.forEach(chunk => {
+        if (/^\s+$/.test(chunk) && cursorX === x) {
+          return;
+        }
+        drawWord(chunk);
+      });
+
+      if (lineIndex < lines.length - 1) {
+        newLine();
+      }
+    });
+  });
+
+  return Math.max(lineHeight, cursorY - y + lineHeight);
+};
+
 const renderSectionBar = (doc, text, y) => {
   const x = PAGE.left;
   const width = doc.page.width - PAGE.left - PAGE.right;
-  const h = 24;
+  const h = SECTION_BAR_HEIGHT;
   doc
     .save()
     .rect(x, y, width, h)
@@ -41,6 +175,104 @@ const renderSectionBar = (doc, text, y) => {
   return y + h;
 };
 
+const ensureSpaceForSection = (doc, y, estimatedFirstRowHeight = 40) => {
+  const pageLimit = doc.page.height - PAGE.bottom - FOOTER_RESERVED_HEIGHT;
+  if (y + SECTION_BAR_HEIGHT + estimatedFirstRowHeight > pageLimit) {
+    doc.addPage();
+    return PAGE.top;
+  }
+  return y;
+};
+
+const renderTextWithEmailLink = ({
+  doc,
+  text,
+  x,
+  y,
+  width,
+  font = "Helvetica",
+  fontSize = 10
+}) => {
+  const textValue = String(safeText(text));
+  const emailMatch = textValue.match(EMAIL_REGEX);
+
+  if (!emailMatch) {
+    doc
+      .font(font)
+      .fontSize(fontSize)
+      .fillColor("#000000")
+      .text(textValue, x, y, { width });
+    return;
+  }
+
+  const email = emailMatch[0];
+  const emailStart = emailMatch.index || 0;
+  const beforeEmail = textValue.slice(0, emailStart);
+  const afterEmail = textValue.slice(emailStart + email.length);
+
+  if (beforeEmail) {
+    doc
+      .font(font)
+      .fontSize(fontSize)
+      .fillColor("#000000")
+      .text(beforeEmail, x, y, { width, continued: true });
+  }
+
+  doc
+    .font(font)
+    .fontSize(fontSize)
+    .fillColor("#000000")
+    .text(email, {
+      continued: Boolean(afterEmail),
+      link: `mailto:${email}`
+    });
+
+  if (afterEmail) {
+    doc
+      .font(font)
+      .fontSize(fontSize)
+      .fillColor("#000000")
+      .text(afterEmail, { width });
+  }
+
+  doc.fillColor("#000000");
+};
+
+const renderCourseNameRow = (doc, { y, tableX, tableWidth, courseName }) => {
+  const rowHeight = 30;
+  const padding = 5;
+  const fontSize = 10.5;
+  const textY = y + (rowHeight - fontSize) / 2 - 1;
+  const leftWidth = (tableWidth - 1) * 0.2;
+  const rightWidth = tableWidth - leftWidth;
+
+  doc
+    .save()
+    .rect(tableX, y, leftWidth, rowHeight)
+    .fill(COLORS.rowGray)
+    .restore();
+  doc.rect(tableX, y, leftWidth, rowHeight).stroke(COLORS.border);
+  doc.rect(tableX + leftWidth, y, rightWidth, rowHeight).stroke(COLORS.border);
+
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(fontSize)
+    .fillColor("#000000")
+    .text("Course Name", tableX + padding, textY, {
+      width: leftWidth - padding * 2
+    });
+
+  doc
+    .font("Helvetica-Bold")
+    .fontSize(fontSize)
+    .fillColor("#000000")
+    .text(courseName, tableX + leftWidth + padding, textY, {
+      width: rightWidth - padding * 2
+    });
+
+  return y + rowHeight;
+};
+
 const renderTable = (
   doc,
   { startX, startY, tableWidth, columns, rows, showHeader = true }
@@ -48,27 +280,54 @@ const renderTable = (
   let y = startY;
   const padding = 5;
   const colWidths = columns.map(col => (tableWidth - 1) * col.widthRatio);
+  const pageLimit = doc.page.height - PAGE.bottom - FOOTER_RESERVED_HEIGHT;
+  const getSingleLineFontSize = (
+    text,
+    maxWidth,
+    { base = 10.5, min = 7.5, step = 0.5 } = {}
+  ) => {
+    let fontSize = base;
+    doc.font("Helvetica-Bold");
+    while (fontSize > min) {
+      doc.fontSize(fontSize);
+      if (doc.widthOfString(String(safeText(text))) <= maxWidth) {
+        break;
+      }
+      fontSize -= step;
+    }
+    return fontSize;
+  };
 
   const calcRowHeight = (cells, isHeader = false) => {
+    if (isHeader) {
+      return 30;
+    }
     const font = isHeader ? "Helvetica-Bold" : "Helvetica";
     const size = isHeader ? 10.5 : 10;
     return cells.reduce((max, cell, index) => {
-      const h = doc
-        .font(font)
-        .fontSize(size)
-        .heightOfString(String(safeText(cell)), {
-          width: colWidths[index] - padding * 2
-        });
+      const cellText = String(safeText(cell));
+      const h = isHeader
+        ? doc
+            .font(font)
+            .fontSize(size)
+            .heightOfString(cellText, {
+              width: colWidths[index] - padding * 2
+            })
+        : renderRichText(doc, {
+            text: cellText,
+            x: 0,
+            y: 0,
+            width: colWidths[index] - padding * 2,
+            fontSize: size,
+            draw: false
+          });
       return Math.max(max, h + padding * 2);
     }, 18);
   };
 
   const drawRow = ({ cells, isHeader, fillColor }) => {
     const rowHeight = calcRowHeight(cells, isHeader);
-    if (
-      y + rowHeight >
-      doc.page.height - PAGE.bottom - FOOTER_RESERVED_HEIGHT
-    ) {
+    if (y + rowHeight > pageLimit) {
       doc.addPage();
       y = PAGE.top;
     }
@@ -82,17 +341,54 @@ const renderTable = (
           .fill(fillColor)
           .restore();
       doc.rect(x, y, w, rowHeight).stroke(COLORS.border);
-      doc
-        .font(isHeader ? "Helvetica-Bold" : "Helvetica")
-        .fontSize(isHeader ? 10.5 : 10)
-        .fillColor("#000000")
-        .text(String(safeText(cell)), x + padding, y + padding, {
-          width: w - padding * 2
-        });
+      if (isHeader) {
+        const textValue = String(safeText(cell));
+        const fontSize = getSingleLineFontSize(textValue, w - padding * 2);
+        const textY = y + (rowHeight - fontSize) / 2 - 1;
+        doc
+          .font("Helvetica-Bold")
+          .fontSize(fontSize)
+          .fillColor("#000000")
+          .text(textValue, x + padding, textY, {
+            width: w - padding * 2,
+            lineBreak: false
+          });
+      } else {
+        const textValue = String(safeText(cell));
+        if (textValue.match(EMAIL_REGEX)) {
+          renderTextWithEmailLink({
+            doc,
+            text: textValue,
+            x: x + padding,
+            y: y + padding,
+            width: w - padding * 2
+          });
+        } else {
+          renderRichText(doc, {
+            text: textValue,
+            x: x + padding,
+            y: y + padding,
+            width: w - padding * 2,
+            fontSize: 10,
+            draw: true
+          });
+        }
+      }
       x += w;
     });
     y += rowHeight;
   };
+
+  if (showHeader && columns.length > 0) {
+    const headerCells = columns.map(col => col.label);
+    const headerHeight = calcRowHeight(headerCells, true);
+    const firstRowHeight =
+      rows && rows.length > 0 ? calcRowHeight(rows[0], false) : 0;
+    if (y + headerHeight + firstRowHeight > pageLimit) {
+      doc.addPage();
+      y = PAGE.top;
+    }
+  }
 
   if (showHeader && columns.length > 0) {
     drawRow({
@@ -105,14 +401,27 @@ const renderTable = (
   return y;
 };
 
-const formatWorkload = workloadItems => {
-  const rows = workloadItems.map(item => {
-    const workload =
-      Number(item.learningActivitiesWeeks) * Number(item.durationHours);
-    return { ...item, workload };
-  });
-  const totalWorkload = rows.reduce((acc, row) => acc + row.workload, 0);
-  return { rows, totalWorkload, workloadOver25: totalWorkload / 25 };
+const formatCategoryLabel = category => {
+  if (!category) return "-";
+  return toTitleCase(category);
+};
+
+const formatPerson = person => {
+  if (!person) return "-";
+  const fullName = [person.firstName, person.lastName]
+    .filter(Boolean)
+    .join(" ");
+  if (fullName && person.email) {
+    return `${fullName} (${person.email})`;
+  }
+  return fullName || safeText(person.email);
+};
+
+const formatAssistants = assistants => {
+  if (!Array.isArray(assistants) || assistants.length === 0) {
+    return "-";
+  }
+  return assistants.map(formatPerson).join(", ");
 };
 
 const renderFooterStampOnAllPages = (doc, outline) => {
@@ -212,7 +521,7 @@ const buildOutlinePdfBuffer = outline =>
     doc
       .font("Helvetica-Bold")
       .fontSize(16)
-      .text("COURSE SPECIFICATION", tableX, titleY + 10, {
+      .text("COURSE OUTLINE", tableX, titleY + 10, {
         width: tableWidth,
         align: "center"
       });
@@ -238,33 +547,40 @@ const buildOutlinePdfBuffer = outline =>
     doc.rect(tableX, stripY, tableWidth, redStripHeight).stroke(COLORS.border);
 
     y = headerStartY + headerTotalHeight;
+    y = renderCourseNameRow(doc, {
+      y: y + 1,
+      tableX,
+      tableWidth,
+      courseName: `${outline.courseCode} - ${outline.courseName}`
+    });
+
     y = renderTable(doc, {
       startX: tableX,
-      startY: y + 1,
+      startY: y,
       tableWidth,
       columns: [
-        { label: "Name of the Course Unit", widthRatio: 0.22 },
-        { label: "Code", widthRatio: 0.13 },
-        { label: "Year", widthRatio: 0.13 },
-        { label: "Semester", widthRatio: 0.11 },
-        { label: "In-Class Hours (L, T, L)", widthRatio: 0.17 },
-        { label: "Credit", widthRatio: 0.12 },
-        { label: "ECTS Credit", widthRatio: 0.12 }
+        { label: "Code", widthRatio: 0.2 },
+        { label: "Semester", widthRatio: 0.13 },
+        { label: "Theory", widthRatio: 0.13 },
+        { label: "Tutorial", widthRatio: 0.13 },
+        { label: "Lab", widthRatio: 0.12 },
+        { label: "Local Credits", widthRatio: 0.16 },
+        { label: "ECTS", widthRatio: 0.13 }
       ],
       rows: [
         [
-          toTitleCase(outline.courseName),
           outline.courseCode,
-          outline.academicYear,
           toTitleCase(outline.semester),
-          `${outline.theoryHours || 0}, ${outline.tutorialHours ||
-            0}, ${outline.labHours || 0}`,
+          outline.theoryHours || 0,
+          outline.tutorialHours || 0,
+          outline.labHours || 0,
           outline.localCredits,
           outline.ectsCredits
         ]
       ]
     });
 
+    y = ensureSpaceForSection(doc, y);
     y = renderSectionBar(doc, "GENERAL INFORMATION", y);
     y = renderTable(doc, {
       startX: tableX,
@@ -272,36 +588,34 @@ const buildOutlinePdfBuffer = outline =>
       tableWidth,
       showHeader: false,
       columns: [
-        { label: "Field", widthRatio: 0.34 },
-        { label: "Value", widthRatio: 0.66 }
+        { label: "Field", widthRatio: 0.32 },
+        { label: "Value", widthRatio: 0.68 }
       ],
       rows: [
+        [
+          "Prerequisites / Course Level",
+          `Prerequisites: ${
+            outline.prerequisiteCourseCodes.length
+              ? outline.prerequisiteCourseCodes.join(", ")
+              : "-"
+          }   Course Level: ${safeText(outline.courseLevelText)}`
+        ],
         ["Language of Instruction", outline.courseLanguage],
-        ["Level of the Course", outline.courseLevelText || "-"],
-        ["Type of the Course", toTitleCase(outline.courseCategory)],
+        ["Course Lecturer(s)", formatPerson(outline.lecturer)],
+        ["Assistant(s)", formatAssistants(outline.assistants)],
+        ["Office Room", safeText(outline.officeCode)],
+        ["Office Hours", safeText(outline.officeHours)],
         ["Mode of Delivery of the Course", "On-campus Course"],
-        ["Coordinator of the Course", "-"]
+        ["Course Category", formatCategoryLabel(outline.courseCategory)],
+        [
+          "Other Categories",
+          "University Core, University Elective, Area Core, Area Elective, Faculty Core, Faculty Elective"
+        ]
       ]
     });
 
-    y = renderSectionBar(
-      doc,
-      "PREREQUISITES AND/OR CO-REQUISITIES OF THE COURSE",
-      y
-    );
-    const prerequisiteLabel = outline.prerequisiteCourseCodes.length
-      ? outline.prerequisiteCourseCodes.join(", ")
-      : "-";
-    y = renderTable(doc, {
-      startX: tableX,
-      startY: y,
-      tableWidth,
-      showHeader: false,
-      columns: [{ label: "Prerequisite", widthRatio: 1 }],
-      rows: [[`Prerequisite course: ${prerequisiteLabel}`]]
-    });
-
-    y = renderSectionBar(doc, "OBJECTIVES AND CONTENTS OF THE COURSE", y);
+    y = ensureSpaceForSection(doc, y);
+    y = renderSectionBar(doc, "COURSE AIMS AND OBJECTIVES", y);
     y = renderTable(doc, {
       startX: tableX,
       startY: y,
@@ -313,19 +627,20 @@ const buildOutlinePdfBuffer = outline =>
       ],
       rows: [
         [
-          "Aims and Objectives",
+          "Course Aims and Objectives",
           outline.objectives
             .map(item => `${item.objectiveOrder}. ${item.objectiveText}`)
             .join("\n")
         ],
         [
-          "Content of the Course",
+          "Course Content",
           outline.contentItems.map(item => `- ${item.contentText}`).join("\n")
         ]
       ]
     });
 
-    y = renderSectionBar(doc, "KEY COURSE LEARNING OUTCOMES (CLOs)", y);
+    y = ensureSpaceForSection(doc, y);
+    y = renderSectionBar(doc, "COURSE LEARNING OUTCOMES (CLOs)", y);
     y = renderTable(doc, {
       startX: tableX,
       startY: y,
@@ -341,10 +656,36 @@ const buildOutlinePdfBuffer = outline =>
       ])
     });
 
+    y = ensureSpaceForSection(doc, y);
+    y = renderSectionBar(doc, "EVALUATION OF THE COURSE", y);
+    const evaluationTotal = outline.evaluationItems.reduce(
+      (acc, item) => acc + Number(item.weightPercent || 0),
+      0
+    );
+    y = renderTable(doc, {
+      startX: tableX,
+      startY: y,
+      tableWidth,
+      columns: [
+        { label: "Semester Requirements", widthRatio: 0.52 },
+        { label: "Numbers", widthRatio: 0.16 },
+        { label: "Percentage", widthRatio: 0.32 }
+      ],
+      rows: [
+        ...outline.evaluationItems.map(item => [
+          item.name,
+          item.count === undefined ? "-" : item.count,
+          `${Number(item.weightPercent || 0)}%`
+        ]),
+        ["Total", "-", `${evaluationTotal}%`]
+      ]
+    });
+
     if (y > doc.page.height - 300) {
       doc.addPage();
       y = PAGE.top;
     }
+    y = ensureSpaceForSection(doc, y);
     y = renderSectionBar(doc, "WEEKLY TOPICS TO BE COVERED", y);
     y = renderTable(doc, {
       startX: tableX,
@@ -354,10 +695,10 @@ const buildOutlinePdfBuffer = outline =>
         { label: "Week", widthRatio: 0.08 },
         { label: "Subjects", widthRatio: 0.44 },
         { label: "CLOs", widthRatio: 0.14 },
-        { label: "Application", widthRatio: 0.34 }
+        { label: "Tasks/Think Points for Private Study", widthRatio: 0.34 }
       ],
       rows: outline.weeklyTopics.map(topic => [
-        topic.weekNo,
+        topic.weekDate ? `${topic.weekNo}\n${topic.weekDate}` : topic.weekNo,
         `${topic.subjectTitle}\n- ${topic.detailsText}`,
         topic.clos.length
           ? topic.clos.map(clo => clo.cloNumber).join(",")
@@ -366,43 +707,36 @@ const buildOutlinePdfBuffer = outline =>
       ])
     });
 
-    y = renderSectionBar(
-      doc,
-      "STUDENT WORKLOAD & ECTS CREDIT OF THE COURSE",
-      y
-    );
-    const workload = formatWorkload(outline.workloadItems);
+    y = ensureSpaceForSection(doc, y);
+    y = renderSectionBar(doc, "COURSE TEXTBOOKS AND ADDITIONAL READING", y);
     y = renderTable(doc, {
       startX: tableX,
       startY: y,
       tableWidth,
+      showHeader: false,
       columns: [
-        { label: "Type of the Learning Activities", widthRatio: 0.44 },
-        { label: "Learning Activities (# of week)", widthRatio: 0.18 },
-        { label: "Duration (hours, h)", widthRatio: 0.18 },
-        { label: "Workload", widthRatio: 0.2 }
+        { label: "Field", widthRatio: 0.24 },
+        { label: "Details", widthRatio: 0.76 }
       ],
       rows: [
-        ...workload.rows.map(item => [
-          item.activityType,
-          item.learningActivitiesWeeks,
-          Number(item.durationHours),
-          item.workload
-        ]),
-        ["Total Workload of the Course Unit", "", "", workload.totalWorkload],
-        [
-          "Total Workload of the Course Unit / 25",
-          "",
-          "",
-          workload.workloadOver25.toFixed(2)
-        ],
-        [
-          "ECTS Credits allocated for the Course Unit",
-          "",
-          "",
-          outline.ectsCredits
-        ]
+        ["Course Textbooks", safeText(outline.textbooksText)],
+        ["Additional Reading Material", safeText(outline.additionalReadingText)]
       ]
+    });
+
+    y = ensureSpaceForSection(doc, y);
+    y = renderSectionBar(doc, "POLICIES", y);
+    y = renderTable(doc, {
+      startX: tableX,
+      startY: y,
+      tableWidth,
+      showHeader: false,
+      columns: [{ label: "Policy", widthRatio: 1 }],
+      rows: outline.policies.length
+        ? outline.policies.map(policy => [
+            `${policy.policyOrder}. ${policy.title}: ${policy.bodyText}`
+          ])
+        : [["-"]]
     });
 
     renderFooterStampOnAllPages(doc, outline);

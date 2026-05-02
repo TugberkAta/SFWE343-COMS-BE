@@ -25,6 +25,13 @@ CREATE TABLE user_roles(
   user_role VARCHAR(50) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS user_types;
+CREATE TABLE user_types(
+  user_type_id int AUTO_INCREMENT PRIMARY KEY,
+  type_name VARCHAR(100) NOT NULL UNIQUE,
+  permissions_json JSON NOT NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 DROP TABLE IF EXISTS users;
 CREATE TABLE users(
   user_id int AUTO_INCREMENT PRIMARY KEY,
@@ -50,6 +57,15 @@ CREATE TABLE programs(
   name VARCHAR(150) NOT NULL,
   language ENUM('English','Turkish') NOT NULL DEFAULT 'English',
   FOREIGN KEY (department_id) REFERENCES departments(department_id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE program_learning_outcomes(
+  plo_id int AUTO_INCREMENT PRIMARY KEY,
+  program_id int NOT NULL,
+  plo_number TINYINT NOT NULL,
+  statement TEXT NOT NULL,
+  UNIQUE (program_id, plo_number),
+  FOREIGN KEY (program_id) REFERENCES programs(program_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE terms(
@@ -99,11 +115,10 @@ CREATE TABLE course_outlines(
   version_no int NOT NULL DEFAULT 1,
   status ENUM('draft','published','archived') NOT NULL DEFAULT 'draft',
   lecturer_user_id int NOT NULL,
-  assistant_user_id int,
-  aims_objectives_text TEXT,
-  content_text TEXT,
   textbooks_text TEXT,
   additional_reading_text TEXT,
+  office_hours VARCHAR(255),
+  office_code VARCHAR(100),
   created_by_user_id int NOT NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -111,8 +126,15 @@ CREATE TABLE course_outlines(
   FOREIGN KEY (course_id) REFERENCES courses(course_id),
   FOREIGN KEY (term_id) REFERENCES terms(term_id),
   FOREIGN KEY (lecturer_user_id) REFERENCES users(user_id),
-  FOREIGN KEY (assistant_user_id) REFERENCES users(user_id),
   FOREIGN KEY (created_by_user_id) REFERENCES users(user_id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE outline_assistants(
+  outline_id int NOT NULL,
+  assistant_user_id int NOT NULL,
+  PRIMARY KEY (outline_id, assistant_user_id),
+  FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE,
+  FOREIGN KEY (assistant_user_id) REFERENCES users(user_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE outline_objectives(
@@ -160,6 +182,7 @@ CREATE TABLE outline_evaluation_items(
   item_order TINYINT NOT NULL,
   name VARCHAR(120) NOT NULL,
   category ENUM('midterm','final','quiz','assignment','project','lab','participation','other') NOT NULL DEFAULT 'other',
+  `count` TINYINT NOT NULL DEFAULT 1,
   weight_percent DECIMAL(5,2) NOT NULL,
   notes TEXT,
   UNIQUE (outline_id, item_order),
@@ -192,7 +215,6 @@ CREATE TABLE outline_learning_outcomes(
   clo_id int AUTO_INCREMENT PRIMARY KEY,
   outline_id int NOT NULL,
   clo_number TINYINT NOT NULL,
-  domain ENUM('knowledge','skill','competency'),
   statement TEXT NOT NULL,
   UNIQUE (outline_id, clo_number),
   FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
@@ -228,22 +250,18 @@ CREATE TABLE outline_weekly_topic_clos(
 
 CREATE TABLE outline_policies(
   policy_id int AUTO_INCREMENT PRIMARY KEY,
-  outline_id int NOT NULL,
   policy_order TINYINT NOT NULL,
   title VARCHAR(150) NOT NULL,
   body_text TEXT NOT NULL,
-  UNIQUE (outline_id, policy_order),
-  FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
+  UNIQUE (policy_order)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE outline_reference_links(
   reference_link_id int AUTO_INCREMENT PRIMARY KEY,
-  outline_id int NOT NULL,
   link_order TINYINT NOT NULL,
   label VARCHAR(150) NOT NULL,
   url VARCHAR(500) NOT NULL,
-  UNIQUE (outline_id, link_order),
-  FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
+  UNIQUE (link_order)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE user_email_shortcodes (
