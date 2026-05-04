@@ -8,8 +8,8 @@ safeDescribe("#POST login", () => {
     const res = await request(app)
       .post("/login")
       .send({
-        email: "bahriyetest1@test.com",
-        password: "sifre123"
+        email: "ahmet@akinsql.com",
+        password: "password"
       })
       .set("Accept", "application/json");
     expect(res.statusCode).to.equal(200);
@@ -20,7 +20,7 @@ safeDescribe("#POST login", () => {
     const res = await request(app)
       .post("/login")
       .send({
-        email: "bahriyetest1@test.com",
+        email: "ahmet@akinsql.com",
         password: "wrongpassword"
       })
       .set("Accept", "application/json");
