@@ -4,6 +4,8 @@ const authorise = ({ permissions }) => async (req, res, next) => {
   const { userId } = req.user;
   const userInfo = await getUserPermissions({ userId });
 
+  console.log(userInfo);
+
   if (!userInfo) {
     return res.sendStatus(403);
   }

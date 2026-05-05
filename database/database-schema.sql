@@ -40,9 +40,11 @@ CREATE TABLE users(
   email VARCHAR(50) NOT NULL UNIQUE,
   password VARCHAR(500) NOT NULL,
   user_role_id int NULL DEFAULT NULL,
+  user_type_id int NULL DEFAULT NULL,
   approved BOOLEAN NOT NULL DEFAULT FALSE,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (user_role_id) REFERENCES user_roles(user_role_id)
+  FOREIGN KEY (user_role_id) REFERENCES user_roles(user_role_id),
+  FOREIGN KEY (user_type_id) REFERENCES user_types(user_type_id)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE departments(

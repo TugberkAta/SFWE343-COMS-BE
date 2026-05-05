@@ -450,3 +450,15 @@ VALUES (3, 1, 3, "Project Work", "Project milestones and final presentations mus
 
 INSERT INTO outline_reference_links (reference_link_id, outline_id, link_order, label, url)
 VALUES (1, 1, 1, "Course Specification (SFWE343)", "https://fiu.edu.tr/");
+
+INSERT INTO user_types (user_type_id, type_name, permissions_json)
+VALUES (5, "admin_type", JSON_ARRAY(
+  "users.read",
+  "users.write",
+  "users.edit",
+  "users.approve",
+  "outlines.read",
+  "outlines.write"
+));
+
+UPDATE users SET user_type_id = 5 WHERE user_id = 1;
