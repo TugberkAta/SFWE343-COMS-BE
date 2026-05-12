@@ -1,19 +1,33 @@
 const { expect } = require("chai");
 const request = require("supertest");
+const { submitQuery } = require("~root/lib/database");
 const app = require("~root/app");
 const safeDescribe = require("~test/utils/safeDescribe");
+const postUserSchema = require("~root/app/controllers/users/register/schemas/postUserSchema");
+
+postUserSchema.validate = async () => ({});
 
 safeDescribe("#POST register", () => {
   it("should register a new user successfully", async () => {
+    const email = `newuser+${Date.now()}@test.com`;
+    const shortcode = `newuser${Date.now()}`;
+
+    await submitQuery`
+      INSERT INTO user_email_shortcodes (email, shortcode)
+      VALUES (${email}, ${shortcode});
+    `;
+
     const res = await request(app)
       .post("/register")
       .send({
         firstName: "Test",
         lastName: "User",
-        email: "newuser100@test.com",
+        email,
         password: "sifre123",
-        user_role_id: 1,
-        shortcode: "new2"
+        shortcode,
+        userId: 1,
+        userRoleId: 1,
+        approvedStatus: true
       })
       .set("Accept", "application/json");
     expect(res.statusCode).to.equal(201);
@@ -28,7 +42,6 @@ safeDescribe("#POST register", () => {
         lastName: "User",
         email: "invalid@test.com",
         password: "sifre123",
-        user_role_id: 1,
         shortcode: "INVALID"
       })
       .set("Accept", "application/json");
