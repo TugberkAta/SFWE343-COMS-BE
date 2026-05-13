@@ -4,18 +4,20 @@ const createCourseOutline = async ({
   courseId,
   termId,
   lecturerUserId,
-  assistantUserId,
   textbooksText,
   additionalReadingText,
+  officeHours,
+  officeCode,
   createdByUserId
 }) => {
   const outlineId = await insertCourseOutline({
     courseId,
     termId,
     lecturerUserId,
-    assistantUserId,
     textbooksText,
     additionalReadingText,
+    officeHours,
+    officeCode,
     createdByUserId
   });
   return { outlineId };

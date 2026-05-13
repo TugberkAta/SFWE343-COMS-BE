@@ -1,15 +1,14 @@
 const insertOutlinePolicies = require("~root/actions/courseOutline/createOutlinePolicies/queries/insertOutlinePolicies");
 const deleteOutlinePolicies = require("./queries/deleteOutlinePolicies");
 
-const patchOutlinePolicies = async ({ outlineId, policies }) => {
+const patchOutlinePolicies = async ({ policies }) => {
   if (policies === undefined) {
     return;
   }
 
-  await deleteOutlinePolicies({ outlineId });
+  await deleteOutlinePolicies();
   for (const [index, policy] of policies.entries()) {
     await insertOutlinePolicies({
-      outlineId,
       policyOrder:
         policy.policyOrder === undefined ? index + 1 : policy.policyOrder,
       title: policy.title || policy.policyType || "",
