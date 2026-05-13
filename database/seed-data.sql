@@ -75,8 +75,8 @@ VALUES (
   )
 );
 
-INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, created_at)
-VALUES (1, "Ahmet", "Akinsql", "ahmet@akinsql.com", SHA2(CONCAT("password","SECRET_SALT"), 224), 1, "2020-11-20 12:00:00");
+INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, user_type_id, created_at)
+VALUES (1, "Ahmet", "Akinsql", "ahmet@akinsql.com", SHA2(CONCAT("password","SECRET_SALT"), 224), 1, 1,  "2020-11-20 12:00:00");
 INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, created_at)
 VALUES (2, "Joe", "Bloggs","joebloggs@gmail.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, "2020-11-20 12:00:00");
 INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, created_at)
@@ -475,9 +475,6 @@ INSERT INTO outline_policies (policy_id, policy_order, title, body_text)
 VALUES (2, 2, "Academic Integrity", "All submissions must be original. Plagiarism and unauthorized collaboration are handled under university regulations.");
 INSERT INTO outline_policies (policy_id, policy_order, title, body_text)
 VALUES (3, 3, "Project Work", "Project milestones and final presentations must be submitted on time. Team contribution is expected and may be individually reviewed.");
-
-INSERT INTO outline_reference_links (reference_link_id, outline_id, link_order, label, url)
-VALUES (1, 1, 1, "Course Specification (SFWE343)", "https://fiu.edu.tr/");
 
 INSERT INTO user_types (user_type_id, type_name, permissions_json)
 VALUES (5, "admin_type", JSON_ARRAY(
