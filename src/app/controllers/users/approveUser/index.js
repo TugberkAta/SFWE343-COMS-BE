@@ -4,7 +4,7 @@ const postApproveUserSchema = require("./schemas/postApproveUserSchema");
 
 const postApproveUser = async (req, res) => {
   const { userId: currentUserId } = req.user;
-  const { userId, userRoleId, approvedStatus } = req.body;
+  const { userId, userRoleId, userTypeId, approvedStatus } = req.body;
 
   if (currentUserId === userId) {
     return res
@@ -14,11 +14,11 @@ const postApproveUser = async (req, res) => {
 
   try {
     await postApproveUserSchema.validate(
-      { userId, userRoleId, approvedStatus },
+      { userId, userRoleId, userTypeId, approvedStatus },
       { abortEarly: false }
     );
 
-    await approveUser({ userId, userRoleId, approvedStatus });
+    await approveUser({ userId, userRoleId, userTypeId, approvedStatus });
     return res.send({ message: "User approval status updated successfully." });
   } catch (err) {
     return handleAPIError(res, err);

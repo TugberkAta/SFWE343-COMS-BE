@@ -476,5 +476,19 @@ VALUES (2, 2, "Academic Integrity", "All submissions must be original. Plagiaris
 INSERT INTO outline_policies (policy_id, policy_order, title, body_text)
 VALUES (3, 3, "Project Work", "Project milestones and final presentations must be submitted on time. Team contribution is expected and may be individually reviewed.");
 
+INSERT INTO outline_reference_links (reference_link_id, outline_id, link_order, label, url)
+VALUES (1, 1, 1, "Course Specification (SFWE343)", "https://fiu.edu.tr/");
+
+INSERT INTO user_types (user_type_id, type_name, permissions_json)
+VALUES (5, "admin_type", JSON_ARRAY(
+  "users.read",
+  "users.write",
+  "users.edit",
+  "users.approve",
+  "outlines.read",
+  "outlines.write"
+));
+
+UPDATE users SET user_type_id = 5 WHERE user_id = 1;
 INSERT INTO outline_reference_links (reference_link_id, link_order, label, url)
 VALUES (1, 1, "Course Specification (SFWE343)", "https://fiu.edu.tr/");

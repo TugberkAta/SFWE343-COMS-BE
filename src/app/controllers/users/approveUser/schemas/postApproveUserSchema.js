@@ -11,6 +11,11 @@ const postApproveUserSchema = yup.object().shape({
     .integer()
     .positive()
     .required("User role id is required."),
+  userTypeId: yup
+    .number()
+    .integer()
+    .positive()
+    .required("User type id is required."),
   approvedStatus: yup.boolean().required("Approved status is required.")
 });
 
