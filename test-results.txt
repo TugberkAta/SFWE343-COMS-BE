@@ -1,0 +1,22 @@
+
+> coms-be@1.0.0 integration-test
+> PORT=3002 NODE_ENV=test nyc --reporter=lcov --reporter=json mocha --exit --recursive --timeout 60000 --file ./test/utils/setupTests/index.js
+
+Ignoring invalid configuration option passed to Connection: transaction. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid timezone passed to Connection: utc. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+[31m[ERROR] [39m[31mThe client was disconnected by the server because of inactivity. See wait_timeout and interactive_timeout for configuring this behavior.[39m[35m
+  Error: The client was disconnected by the server because of inactivity. See wait_timeout and interactive_timeout for configuring this behavior.
+      at Connection.protocolError (/home/bahriye_gezerbahriye/SFWE343-COMS-BE/node_modules/mysql2/lib/base/connection.js:409:17)
+      at Connection.handlePacket (/home/bahriye_gezerbahriye/SFWE343-COMS-BE/node_modules/mysql2/lib/base/connection.js:479:14)
+      at PacketParser.onPacket (/home/bahriye_gezerbahriye/SFWE343-COMS-BE/node_modules/mysql2/lib/base/connection.js:93:12)
+      at PacketParser.executeStart (/home/bahriye_gezerbahriye/SFWE343-COMS-BE/node_modules/mysql2/lib/packet_parser.js:75:16)
+      at Socket.<anonymous> (/home/bahriye_gezerbahriye/SFWE343-COMS-BE/node_modules/mysql2/lib/base/connection.js:100:25)
+      at Socket.emit (node:events:508:28)
+      at addChunk (node:internal/streams/readable:563:12)
+      at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)
+      at Readable.push (node:internal/streams/readable:394:5)
+      at TCP.onStreamRead (node:internal/stream_base_commons:189:23)[39m
+  fatal: [33mtrue[39m
+  code: [35m4031[39m
+Ignoring invalid configuration option passed to Connection: transaction. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection
+Ignoring invalid timezone passed to Connection: utc. This is currently a warning, but in future versions of MySQL2, an error will be thrown if you pass an invalid configuration option to a Connection

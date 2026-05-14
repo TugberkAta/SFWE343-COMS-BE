@@ -43,7 +43,7 @@ const selectOutlineById = getFirst(
 
 const selectOutlineObjectives = camelKeys(
   outlineId => submitQuery`
-  SELECT objective_id, objective_order, objective_text
+  SELECT objective_order, objective_text
   FROM outline_objectives
   WHERE outline_id = ${outlineId}
   ORDER BY objective_order ASC
@@ -66,7 +66,7 @@ const selectOutlineAssistants = camelKeys(
 
 const selectOutlineContentItems = camelKeys(
   outlineId => submitQuery`
-  SELECT content_item_id, content_order, content_text
+SELECT content_order, content_text
   FROM outline_content_items
   WHERE outline_id = ${outlineId}
   ORDER BY content_order ASC

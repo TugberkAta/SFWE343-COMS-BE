@@ -142,18 +142,22 @@ safeDescribe("#POST /course-outline", () => {
 
     await submitQuery`
       CREATE TABLE IF NOT EXISTS outline_objectives (
+        objective_id INT AUTO_INCREMENT PRIMARY KEY,
         outline_id INT NOT NULL,
-        objective_order INT NOT NULL,
+        objective_order TINYINT NOT NULL,
         objective_text TEXT NOT NULL,
+        UNIQUE (outline_id, objective_order),
         FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
       );
     `;
 
     await submitQuery`
       CREATE TABLE IF NOT EXISTS outline_content_items (
+        content_item_id INT AUTO_INCREMENT PRIMARY KEY,
         outline_id INT NOT NULL,
-        content_order INT NOT NULL,
+        content_order TINYINT NOT NULL,
         content_text TEXT NOT NULL,
+        UNIQUE (outline_id, content_order),
         FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
       );
     `;
@@ -162,8 +166,9 @@ safeDescribe("#POST /course-outline", () => {
       CREATE TABLE IF NOT EXISTS outline_learning_outcomes (
         clo_id INT AUTO_INCREMENT PRIMARY KEY,
         outline_id INT NOT NULL,
-        clo_number INT NOT NULL,
+        clo_number TINYINT NOT NULL,
         statement TEXT NOT NULL,
+        UNIQUE (outline_id, clo_number),
         FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
       );
     `;
@@ -235,6 +240,10 @@ safeDescribe("#POST /course-outline", () => {
         5
       )
       ON DUPLICATE KEY UPDATE course_id = course_id;
+    `;
+
+    await submitQuery`
+      DELETE FROM course_outlines WHERE course_id = 1 AND term_id = 1;
     `;
 
     adminToken = await getJWTToken(1);

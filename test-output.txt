@@ -1,0 +1,4 @@
+
+> coms-be@1.0.0 integration-test
+> PORT=3002 NODE_ENV=test nyc --reporter=lcov --reporter=json mocha --exit --recursive --timeout 60000 --file ./test/utils/setupTests/index.js
+
