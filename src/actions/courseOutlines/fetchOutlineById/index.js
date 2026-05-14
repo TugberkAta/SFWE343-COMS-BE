@@ -84,7 +84,7 @@ const selectOutlineLearningOutcomes = camelKeys(
 
 const selectOutlineWeeklyTopics = camelKeys(
   outlineId => submitQuery`
-  SELECT weekly_topic_id, week_no, week_date, subject_title, details_text, tasks_private_study_text
+  SELECT weekly_topic_id, week_no, subject_title, details_text, tasks_private_study_text
   FROM outline_weekly_topics
   WHERE outline_id = ${outlineId}
   ORDER BY week_no ASC
@@ -151,20 +151,6 @@ const selectOutlineEvaluationItems = camelKeys(
 `
 );
 
-const selectOutlineEvaluationItemClos = camelKeys(
-  outlineId => submitQuery`
-  SELECT
-    oeic.evaluation_item_id,
-    clo.clo_id,
-    clo.clo_number
-  FROM outline_evaluation_item_clos oeic
-  JOIN outline_evaluation_items oei ON oei.evaluation_item_id = oeic.evaluation_item_id
-  JOIN outline_learning_outcomes clo ON clo.clo_id = oeic.clo_id
-  WHERE oei.outline_id = ${outlineId}
-  ORDER BY oei.item_order ASC, clo.clo_number ASC
-`
-);
-
 const selectOutlinePrerequisiteCourseCodes = camelKeys(
   outlineId => submitQuery`
   SELECT pc.code
@@ -202,7 +188,6 @@ const fetchOutlineById = async ({ outlineId }) => {
     referenceLinks,
     workloadItems,
     evaluationItems,
-    evaluationItemClos,
     prerequisiteCourseCodes,
     programLearningOutcomes
   ] = await Promise.all([
@@ -216,7 +201,6 @@ const fetchOutlineById = async ({ outlineId }) => {
     selectOutlineReferenceLinks(),
     selectOutlineWorkloadItems(outlineId),
     selectOutlineEvaluationItems(outlineId),
-    selectOutlineEvaluationItemClos(outlineId),
     selectOutlinePrerequisiteCourseCodes(outlineId),
     selectProgramLearningOutcomes(outlineId)
   ]);
@@ -224,15 +208,6 @@ const fetchOutlineById = async ({ outlineId }) => {
   const cloMapByTopicId = weeklyTopicClos.reduce((acc, item) => {
     if (!acc[item.weeklyTopicId]) acc[item.weeklyTopicId] = [];
     acc[item.weeklyTopicId].push({
-      cloId: item.cloId,
-      cloNumber: item.cloNumber
-    });
-    return acc;
-  }, {});
-
-  const cloMapByEvaluationItemId = evaluationItemClos.reduce((acc, item) => {
-    if (!acc[item.evaluationItemId]) acc[item.evaluationItemId] = [];
-    acc[item.evaluationItemId].push({
       cloId: item.cloId,
       cloNumber: item.cloNumber
     });
@@ -266,10 +241,7 @@ const fetchOutlineById = async ({ outlineId }) => {
     workloadItems,
     prerequisiteCourseCodes: prerequisiteCourseCodes.map(item => item.code),
     programLearningOutcomes,
-    evaluationItems: evaluationItems.map(item => ({
-      ...item,
-      clos: cloMapByEvaluationItemId[item.evaluationItemId] || []
-    }))
+    evaluationItems
   };
 };
 

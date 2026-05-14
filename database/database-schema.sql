@@ -222,19 +222,10 @@ CREATE TABLE outline_learning_outcomes(
   FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-CREATE TABLE outline_evaluation_item_clos(
-  evaluation_item_id int NOT NULL,
-  clo_id int NOT NULL,
-  PRIMARY KEY (evaluation_item_id, clo_id),
-  FOREIGN KEY (evaluation_item_id) REFERENCES outline_evaluation_items(evaluation_item_id) ON DELETE CASCADE,
-  FOREIGN KEY (clo_id) REFERENCES outline_learning_outcomes(clo_id) ON DELETE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
-
 CREATE TABLE outline_weekly_topics(
   weekly_topic_id int AUTO_INCREMENT PRIMARY KEY,
   outline_id int NOT NULL,
   week_no TINYINT NOT NULL,
-  week_date DATE,
   subject_title VARCHAR(255) NOT NULL,
   details_text TEXT,
   tasks_private_study_text TEXT,

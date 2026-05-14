@@ -7,7 +7,6 @@ const patchOutlineEvaluationItems = async ({ outlineId, evaluationItems }) => {
   }
 
   await deleteOutlineEvaluationItems({ outlineId });
-  const evalMap = {};
   for (const [index, item] of evaluationItems.entries()) {
     const itemOrder = item.itemOrder === undefined ? index + 1 : item.itemOrder;
     let occurrenceCount = 1;
@@ -16,7 +15,7 @@ const patchOutlineEvaluationItems = async ({ outlineId, evaluationItems }) => {
     } else if (item.occurrenceCount !== undefined) {
       occurrenceCount = item.occurrenceCount;
     }
-    const evaluationItemId = await insertOutlineEvaluationItems({
+    await insertOutlineEvaluationItems({
       outlineId,
       itemOrder,
       name: item.name || item.title || "",
@@ -28,9 +27,8 @@ const patchOutlineEvaluationItems = async ({ outlineId, evaluationItems }) => {
           : item.weightPercent,
       notes: item.notes
     });
-    evalMap[itemOrder] = { evaluationItemId, clos: item.clos || [] };
   }
-  return evalMap;
+  return {};
 };
 
 module.exports = patchOutlineEvaluationItems;

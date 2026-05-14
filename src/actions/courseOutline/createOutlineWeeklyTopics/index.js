@@ -6,7 +6,6 @@ const createOutlineWeeklyTopics = async ({ outlineId, weeklyTopics }) => {
     const weeklyTopicId = await insertOutlineWeeklyTopics({
       outlineId,
       weekNo: topic.weekNo,
-      weekDate: topic.weekDate,
       subjectTitle: topic.subjectTitle || topic.topic || "",
       detailsText: topic.detailsText || topic.description,
       tasksPrivateStudyText: topic.tasksPrivateStudyText

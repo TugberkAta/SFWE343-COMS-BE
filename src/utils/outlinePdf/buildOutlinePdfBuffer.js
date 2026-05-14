@@ -698,7 +698,7 @@ const buildOutlinePdfBuffer = outline =>
         { label: "Tasks/Think Points for Private Study", widthRatio: 0.34 }
       ],
       rows: outline.weeklyTopics.map(topic => [
-        topic.weekDate ? `${topic.weekNo}\n${topic.weekDate}` : topic.weekNo,
+        topic.weekNo,
         `${topic.subjectTitle}\n- ${topic.detailsText}`,
         topic.clos.length
           ? topic.clos.map(clo => clo.cloNumber).join(",")

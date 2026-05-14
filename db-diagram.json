@@ -1086,17 +1086,6 @@
               ]
             },
             {
-              "name": "week_date",
-              "type": "date",
-              "nullable": true,
-              "origins": [
-                {
-                  "id": "98006620-7170-46c5-8740-3c9d395729a5",
-                  "lines": []
-                }
-              ]
-            },
-            {
               "name": "week_no",
               "type": "tinyint",
               "nullable": false,

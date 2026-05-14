@@ -12,7 +12,6 @@ const patchOutlineWeeklyTopics = async ({ outlineId, weeklyTopics }) => {
     const weeklyTopicId = await insertOutlineWeeklyTopics({
       outlineId,
       weekNo: topic.weekNo,
-      weekDate: topic.weekDate,
       subjectTitle: topic.subjectTitle,
       detailsText: topic.detailsText,
       tasksPrivateStudyText: topic.tasksPrivateStudyText

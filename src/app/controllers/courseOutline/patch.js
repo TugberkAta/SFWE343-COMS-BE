@@ -8,7 +8,6 @@ const patchOutlinePolicies = require("~root/actions/courseOutline/patchOutlinePo
 const patchOutlineReferenceLinks = require("~root/actions/courseOutline/patchOutlineReferenceLinks");
 const patchOutlineWorkloadItems = require("~root/actions/courseOutline/patchOutlineWorkloadItems");
 const patchOutlineEvaluationItems = require("~root/actions/courseOutline/patchOutlineEvaluationItems");
-const patchOutlineEvaluationItemClos = require("~root/actions/courseOutline/patchOutlineEvaluationItemClos");
 const patchOutlineAssistants = require("~root/actions/courseOutline/patchOutlineAssistants");
 const handleAPIError = require("~root/utils/handleAPIError");
 const patchCourseOutlineSchema = require("./schemas/patchCourseOutlineSchema");
@@ -76,11 +75,10 @@ const patchCourseOutline = async (req, res) => {
     await patchOutlineReferenceLinks({ referenceLinks });
     await patchOutlineWorkloadItems({ outlineId, workloadItems });
 
-    const evalMap = await patchOutlineEvaluationItems({
+    await patchOutlineEvaluationItems({
       outlineId,
       evaluationItems
     });
-    await patchOutlineEvaluationItemClos({ evalMap, cloMap });
 
     return res.send({ outlineId });
   } catch (err) {

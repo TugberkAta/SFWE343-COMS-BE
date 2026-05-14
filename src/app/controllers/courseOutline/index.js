@@ -8,7 +8,6 @@ const createOutlinePolicies = require("~root/actions/courseOutline/createOutline
 const createOutlineReferenceLinks = require("~root/actions/courseOutline/createOutlineReferenceLinks");
 const createOutlineWorkloadItems = require("~root/actions/courseOutline/createOutlineWorkloadItems");
 const createOutlineEvaluationItems = require("~root/actions/courseOutline/createOutlineEvaluationItems");
-const createOutlineEvaluationItemClos = require("~root/actions/courseOutline/createOutlineEvaluationItemClos");
 const createOutlineAssistants = require("~root/actions/courseOutline/createOutlineAssistants");
 const createProgramLearningOutcomes = require("~root/actions/courseOutline/createProgramLearningOutcomes");
 const {
@@ -89,11 +88,10 @@ const postCourseOutline = async (req, res) => {
     await createProgramLearningOutcomes({ courseId, programLearningOutcomes });
     await createOutlineWorkloadItems({ outlineId, workloadItems });
 
-    const evalMap = await createOutlineEvaluationItems({
+    await createOutlineEvaluationItems({
       outlineId,
       evaluationItems
     });
-    await createOutlineEvaluationItemClos({ evalMap, cloMap });
 
     await commitTransaction();
     transactionStarted = false;
