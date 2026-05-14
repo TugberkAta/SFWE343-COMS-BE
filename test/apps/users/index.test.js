@@ -11,8 +11,7 @@ safeDescribe("#POST sign-in-approval", () => {
     adminToken = await getJWTToken(1);
   });
 
-  it("should approve user with no role and assign admin role", async () => {
-    // First, get a user with no role
+  it("should reject sign-in request for user with no role", async () => {
     const usersRes = await request(app)
       .get("/users/no-role")
       .set("Authorization", `Bearer ${adminToken}`)
@@ -23,14 +22,38 @@ safeDescribe("#POST sign-in-approval", () => {
     expect(usersRes.body.users.length).to.be.greaterThan(0);
 
     const userWithNoRole = usersRes.body.users[0];
-    const userId = userWithNoRole.userId;
+    const { userId } = userWithNoRole;
 
-    // Approve the user and assign admin role (roleId = 1)
+    const res = await request(app)
+      .post("/reject-user")
+      .send({
+        userId
+      })
+      .set("Authorization", `Bearer ${adminToken}`)
+      .set("Accept", "application/json");
+
+    expect(res.statusCode).to.equal(200);
+    expect(res.body).to.have.property("message");
+  });
+
+  it("should approve user with no role and assign a user type", async () => {
+    const usersRes = await request(app)
+      .get("/users/no-role")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .set("Accept", "application/json");
+
+    expect(usersRes.statusCode).to.equal(200);
+    expect(usersRes.body).to.have.property("users");
+    expect(usersRes.body.users.length).to.be.greaterThan(0);
+
+    const userWithNoRole = usersRes.body.users[0];
+    const { userId } = userWithNoRole;
+
     const res = await request(app)
       .post("/approve-user")
       .send({
-        userId: userId,
-        userRoleId: 1,
+        userId,
+        userTypeId: 4,
         approvedStatus: true
       })
       .set("Authorization", `Bearer ${adminToken}`)
@@ -40,8 +63,7 @@ safeDescribe("#POST sign-in-approval", () => {
     expect(res.body).to.have.property("message");
   });
 
-  it("should approve user that already has a role", async () => {
-    // Get users with roles
+  it("should approve user that is already approved", async () => {
     const usersRes = await request(app)
       .get("/users/with-role")
       .set("Authorization", `Bearer ${adminToken}`)
@@ -51,46 +73,17 @@ safeDescribe("#POST sign-in-approval", () => {
     expect(usersRes.body).to.have.property("users");
     expect(usersRes.body.users.length).to.be.greaterThan(0);
 
-    // Find a user that is not the admin (userId = 1)
     const userWithRole = usersRes.body.users.find(u => u.userId !== 1);
-    expect(userWithRole).to.not.be.undefined;
+    expect(userWithRole).to.not.be.undefined();
 
-    const userId = userWithRole.userId;
+    const { userId } = userWithRole;
 
-    // Approve with a different role (e.g., roleId = 3)
     const res = await request(app)
       .post("/approve-user")
       .send({
-        userId: userId,
-        userRoleId: 3,
+        userId,
+        userTypeId: 2,
         approvedStatus: true
-      })
-      .set("Authorization", `Bearer ${adminToken}`)
-      .set("Accept", "application/json");
-
-    expect(res.statusCode).to.equal(200);
-    expect(res.body).to.have.property("message");
-  });
-
-  it("should reject sign-in request for user with no role", async () => {
-    // Get a user with no role
-    const usersRes = await request(app)
-      .get("/users/no-role")
-      .set("Authorization", `Bearer ${adminToken}`)
-      .set("Accept", "application/json");
-
-    expect(usersRes.statusCode).to.equal(200);
-    expect(usersRes.body).to.have.property("users");
-    expect(usersRes.body.users.length).to.be.greaterThan(0);
-
-    const userWithNoRole = usersRes.body.users[0];
-    const userId = userWithNoRole.userId;
-
-    // Reject the sign-in request using the reject-user endpoint
-    const res = await request(app)
-      .post("/reject-user")
-      .send({
-        userId: userId
       })
       .set("Authorization", `Bearer ${adminToken}`)
       .set("Accept", "application/json");

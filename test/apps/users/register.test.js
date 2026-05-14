@@ -12,7 +12,6 @@ safeDescribe("#POST register", () => {
         lastName: "User",
         email: "newuser100@test.com",
         password: "sifre123",
-        user_role_id: 1,
         shortcode: "new2"
       })
       .set("Accept", "application/json");
@@ -28,7 +27,6 @@ safeDescribe("#POST register", () => {
         lastName: "User",
         email: "invalid@test.com",
         password: "sifre123",
-        user_role_id: 1,
         shortcode: "INVALID"
       })
       .set("Accept", "application/json");

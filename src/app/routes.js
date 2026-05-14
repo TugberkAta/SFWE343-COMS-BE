@@ -13,9 +13,11 @@ const postApproveUser = require("./controllers/users/approveUser");
 const postRejectUser = require("./controllers/users/rejectUser");
 const getUsersWithNoRole = require("./controllers/users/getUsersWithNoRole");
 const getUsersWithRole = require("./controllers/users/getUsersWithRole");
+const patchUserWithRole = require("./controllers/users/patchUserWithRole");
 const { postCourseOutline } = require("./controllers/courseOutline");
 const { patchCourseOutline } = require("./controllers/courseOutline/patch");
 const {
+  getUserTypes,
   postUserType,
   putUserType,
   removeUserType
@@ -68,7 +70,20 @@ router.get(
   getUsersWithRole
 );
 
+router.patch(
+  "/users/with-role/:userId",
+  authentication,
+  authorise({ permissions: [ENDPOINT_PERMISSIONS.users.EDIT] }),
+  patchUserWithRole
+);
+
 // USER TYPES
+router.get(
+  "/user-types",
+  authentication,
+  authorise({ permissions: [ENDPOINT_PERMISSIONS.userTypes.READ] }),
+  getUserTypes
+);
 router.post("/user-types", authentication, postUserType);
 router.put("/user-types/:userTypeId", authentication, putUserType);
 router.delete("/user-types/:userTypeId", authentication, removeUserType);

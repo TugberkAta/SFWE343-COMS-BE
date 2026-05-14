@@ -75,12 +75,16 @@ VALUES (
   )
 );
 
-INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, user_type_id, created_at)
-VALUES (1, "Ahmet", "Akinsql", "ahmet@akinsql.com", SHA2(CONCAT("password","SECRET_SALT"), 224), 1, 1,  "2020-11-20 12:00:00");
-INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, created_at)
-VALUES (2, "Joe", "Bloggs","joebloggs@gmail.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, "2020-11-20 12:00:00");
-INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, created_at)
-VALUES (3, "Jim", "Bloggs" , "jimbloggs@yahoo.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, "2020-11-20 12:00:00");
+INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, user_type_id, approved, created_at)
+VALUES (1, "Ahmet", "Akinsql", "ahmet@akinsql.com", SHA2(CONCAT("password","SECRET_SALT"), 224), 1, 1, TRUE, "2020-11-20 12:00:00");
+INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, user_type_id, approved, created_at)
+VALUES (2, "Joe", "Bloggs","joebloggs@gmail.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, 4, TRUE, "2020-11-20 12:00:00");
+INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, user_type_id, approved, created_at)
+VALUES (3, "Jim", "Bloggs" , "jimbloggs@yahoo.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, 4, TRUE, "2020-11-20 12:00:00");
+INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, user_type_id, approved, created_at)
+VALUES (4, "Paul", "PendingReject", "paul.reject@test.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, null, FALSE, "2020-11-20 12:00:00");
+INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, user_type_id, approved, created_at)
+VALUES (5, "Paula", "PendingApprove", "paula.approve@test.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, null, FALSE, "2020-11-20 12:00:00");
 
 INSERT INTO departments (department_id, type, name)
 VALUES (1, "undergraduate", "Faculty of Law");
@@ -483,7 +487,11 @@ VALUES (5, "admin_type", JSON_ARRAY(
   "users.edit",
   "users.approve",
   "outlines.read",
-  "outlines.write"
+  "outlines.write",
+  "userTypes.read",
+  "userTypes.write",
+  "userTypes.edit",
+  "userTypes.delete"
 ));
 
 UPDATE users SET user_type_id = 5 WHERE user_id = 1;

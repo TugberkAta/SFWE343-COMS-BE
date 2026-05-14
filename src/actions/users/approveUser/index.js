@@ -1,12 +1,7 @@
 const updateUserApproval = require("./queries/updateUserApproval");
 
-const approveUser = async ({
-  userId,
-  userRoleId,
-  userTypeId,
-  approvedStatus
-}) => {
-  await updateUserApproval({ userId, userRoleId, userTypeId, approvedStatus });
+const approveUser = async ({ userId, userTypeId, approvedStatus }) => {
+  await updateUserApproval({ userId, userTypeId, approvedStatus });
   return { success: true };
 };
 

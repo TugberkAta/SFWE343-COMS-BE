@@ -5,6 +5,7 @@ const selectUserById = ({ userId }) => submitQuery`
     users.user_id,
     users.first_name,
     users.last_name,
+    users.email,
     user_roles.user_role_id,
     user_roles.user_role,
     user_types.user_type_id,
