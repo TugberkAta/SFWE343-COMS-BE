@@ -220,32 +220,77 @@ safeDescribe("#POST /course-outline", () => {
         lab_hours,
         local_credits,
         ects_credits
-      ) VALUES (
-        1,
-        1,
-        'COMP101',
-        'Intro to Computing',
-        'English',
-        'Semester 1',
-        'faculty_core',
-        3,
-        0,
-        2,
-        3,
-        5
-      )
+      ) VALUES 
+        (
+          1,
+          1,
+          'COMP101',
+          'Intro to Computing',
+          'English',
+          'Semester 1',
+          'faculty_core',
+          3,
+          0,
+          2,
+          3,
+          5
+        ),
+        (
+          2,
+          1,
+          'COMP102',
+          'Data Structures',
+          'English',
+          'Semester 2',
+          'faculty_core',
+          3,
+          0,
+          2,
+          3,
+          5
+        ),
+        (
+          3,
+          1,
+          'COMP103',
+          'Algorithms',
+          'English',
+          'Semester 3',
+          'faculty_core',
+          3,
+          0,
+          2,
+          3,
+          5
+        ),
+        (
+          4,
+          1,
+          'COMP104',
+          'Web Development',
+          'English',
+          'Semester 4',
+          'faculty_core',
+          3,
+          0,
+          2,
+          3,
+          5
+        )
       ON DUPLICATE KEY UPDATE course_id = course_id;
     `;
 
     adminToken = await getJWTToken(1);
   });
 
+  let courseIdCounter = 2;
+
   it("should create outline successfully with valid data", async () => {
     const res = await request(app)
       .post("/course-outline")
       .set("Accept", "application/json")
       .set("Authorization", `Bearer ${adminToken}`)
-      .send(getValidOutlineData());
+      .send({ ...getValidOutlineData(), courseId: courseIdCounter++ });
 
     expect(res.statusCode).to.equal(201);
     expect(res.body).to.have.property("outlineId");
@@ -255,6 +300,7 @@ safeDescribe("#POST /course-outline", () => {
   it("should reject outline with less than 5 learning outcomes", async () => {
     const outlineData = {
       ...getValidOutlineData(),
+      courseId: courseIdCounter++,
       learningOutcomes: [{ cloNumber: 1, statement: "Only one outcome" }]
     };
 
@@ -280,6 +326,7 @@ safeDescribe("#POST /course-outline", () => {
   it("should reject outline with invalid learning outcome structure", async () => {
     const outlineData = {
       ...getValidOutlineData(),
+      courseId: courseIdCounter++,
       learningOutcomes: [
         { cloNumber: "invalid", statement: "Test" },
         { cloNumber: 2, statement: "Test 2" },
