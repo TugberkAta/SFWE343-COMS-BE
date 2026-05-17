@@ -22,7 +22,7 @@ safeDescribe("#GET /outlines/:outlineId/pdf", () => {
     return null;
   };
 
-  const createTestOutline = async (token) => {
+  const createTestOutline = async token => {
     const outlineData = {
       courseId: 1,
       termId: 1,
@@ -33,12 +33,8 @@ safeDescribe("#GET /outlines/:outlineId/pdf", () => {
       officeHours: "Mon 10-12",
       officeCode: "A101",
       createdByUserId: 1,
-      objectives: [
-        { orderIndex: 1, statement: "Test objective" }
-      ],
-      contentItems: [
-        { orderIndex: 1, title: "Introduction", hours: 3 }
-      ],
+      objectives: [{ orderIndex: 1, statement: "Test objective" }],
+      contentItems: [{ orderIndex: 1, title: "Introduction", hours: 3 }],
       learningOutcomes: [
         { cloNumber: 1, statement: "CLO 1" },
         { cloNumber: 2, statement: "CLO 2" },
@@ -97,7 +93,7 @@ safeDescribe("#GET /outlines/:outlineId/pdf", () => {
       .set("Authorization", `Bearer ${authToken}`);
 
     expect([404, 403]).to.include(res.statusCode);
-    
+
     if (res.statusCode === 404) {
       expect(res.body).to.have.property("message");
       expect(res.body.message).to.equal("Outline not found.");
@@ -113,16 +109,15 @@ safeDescribe("#GET /outlines/:outlineId/pdf", () => {
   });
 
   it("should validate outlineId parameter", async () => {
-  const invalidId = "invalid";
+    const invalidId = "invalid";
 
-  const res = await request(app)
-    .get(`/outlines/${invalidId}/pdf`)
-    .set("Accept", "application/json")
-    .set("Authorization", `Bearer ${authToken}`);
+    const res = await request(app)
+      .get(`/outlines/${invalidId}/pdf`)
+      .set("Accept", "application/json")
+      .set("Authorization", `Bearer ${authToken}`);
 
-  expect([400, 401, 403]).to.include(res.statusCode);
-});
-
+    expect([400, 401, 403]).to.include(res.statusCode);
+  });
 
   it("should generate correct filename format", async () => {
     if (!testOutlineId) {
