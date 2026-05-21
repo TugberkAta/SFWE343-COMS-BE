@@ -106,7 +106,7 @@ CREATE TABLE course_outlines(
   course_id int NOT NULL,
   term_id int NOT NULL,
   version_no int NOT NULL DEFAULT 1,
-  status ENUM('draft','published','archived') NOT NULL DEFAULT 'draft',
+  status ENUM('draft','in_review','approved','published','archived') NOT NULL DEFAULT 'draft',
   lecturer_user_id int NOT NULL,
   assistant_user_id int,
   textbooks_text TEXT,
@@ -258,3 +258,57 @@ CREATE TABLE user_email_shortcodes (
   shortcode VARCHAR(50) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE outline_approval_workflows(
+  workflow_id INT AUTO_INCREMENT PRIMARY KEY,
+  outline_id INT NOT NULL,
+  current_stage ENUM(
+    'stage_1_review',
+    'stage_2_approval',
+    'approved',
+    'rejected',
+    'changes_requested'
+  ) NOT NULL DEFAULT 'stage_1_review',
+  submission_count TINYINT NOT NULL DEFAULT 1,
+  stage_1_reviewer_user_id INT NULL,
+  stage_1_reviewed_at DATETIME NULL,
+  stage_2_approver_user_id INT NULL,
+  stage_2_approved_at DATETIME NULL,
+  final_approved_at DATETIME NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE (outline_id),
+  FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE,
+  FOREIGN KEY (stage_1_reviewer_user_id) REFERENCES users(user_id),
+  FOREIGN KEY (stage_2_approver_user_id) REFERENCES users(user_id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE outline_approval_comments(
+  approval_comment_id INT AUTO_INCREMENT PRIMARY KEY,
+  outline_id INT NOT NULL,
+  workflow_stage ENUM(
+    'stage_1_review',
+    'stage_2_approval'
+  ) NOT NULL,
+  comment_type ENUM(
+    'general_comment',
+    'changes_requested',
+    'approval',
+    'rejection'
+  ) NOT NULL DEFAULT 'general_comment',
+  comment_text TEXT NOT NULL,
+  created_by_user_id INT NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE,
+  FOREIGN KEY (created_by_user_id) REFERENCES users(user_id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE outline_resubmissions(
+  resubmission_id INT AUTO_INCREMENT PRIMARY KEY,
+  outline_id INT NOT NULL,
+  submitted_by_user_id INT NOT NULL,
+  submission_note TEXT,
+  submitted_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (outline_id) REFERENCES course_outlines(outline_id) ON DELETE CASCADE,
+  FOREIGN KEY (submitted_by_user_id) REFERENCES users(user_id)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE utf8mb4_unicode_ci;
