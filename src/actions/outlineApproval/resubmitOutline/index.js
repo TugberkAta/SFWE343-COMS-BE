@@ -1,6 +1,6 @@
+const updateOutlineStatus = require("~root/actions/outlineApproval/submitOutline/queries/updateOutlineStatus");
 const updateWorkflowResubmit = require("./queries/updateWorkflowResubmit");
 const insertResubmission = require("./queries/insertResubmission");
-const updateOutlineStatus = require("~root/actions/outlineApproval/submitOutline/queries/updateOutlineStatus");
 
 const resubmitOutline = async ({
   outlineId,

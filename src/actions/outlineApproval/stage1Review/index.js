@@ -1,6 +1,6 @@
+const updateOutlineStatus = require("~root/actions/outlineApproval/submitOutline/queries/updateOutlineStatus");
 const updateWorkflowStage1 = require("./queries/updateWorkflowStage1");
 const insertApprovalComment = require("./queries/insertApprovalComment");
-const updateOutlineStatus = require("~root/actions/outlineApproval/submitOutline/queries/updateOutlineStatus");
 
 const stage1Review = async ({
   outlineId,
