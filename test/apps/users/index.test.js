@@ -74,7 +74,7 @@ safeDescribe("#POST sign-in-approval", () => {
     expect(usersRes.body.users.length).to.be.greaterThan(0);
 
     const userWithRole = usersRes.body.users.find(u => u.userId !== 1);
-    expect(userWithRole).to.not.be.undefined();
+    expect(userWithRole).to.not.equal(undefined);
 
     const { userId } = userWithRole;
 
