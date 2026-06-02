@@ -10,9 +10,13 @@ const selectOutlineById = getFirst(
       co.version_no,
       co.status,
       co.lecturer_user_id,
-      co.assistant_user_id,
+      lu.first_name AS lecturer_first_name,
+      lu.last_name AS lecturer_last_name,
+      lu.email AS lecturer_email,
       co.textbooks_text,
       co.additional_reading_text,
+      co.office_hours,
+      co.office_code,
       co.created_by_user_id,
       co.created_at,
       co.updated_at,
@@ -31,6 +35,7 @@ const selectOutlineById = getFirst(
     FROM course_outlines co
     JOIN courses c ON c.course_id = co.course_id
     JOIN terms t ON t.term_id = co.term_id
+    JOIN users lu ON lu.user_id = co.lecturer_user_id
     WHERE co.outline_id = ${outlineId}
   `
   )
@@ -42,6 +47,20 @@ const selectOutlineObjectives = camelKeys(
   FROM outline_objectives
   WHERE outline_id = ${outlineId}
   ORDER BY objective_order ASC
+`
+);
+
+const selectOutlineAssistants = camelKeys(
+  outlineId => submitQuery`
+  SELECT
+    oa.assistant_user_id,
+    u.first_name,
+    u.last_name,
+    u.email
+  FROM outline_assistants oa
+  JOIN users u ON u.user_id = oa.assistant_user_id
+  WHERE outline_id = ${outlineId}
+  ORDER BY oa.assistant_user_id ASC
 `
 );
 
@@ -65,7 +84,7 @@ const selectOutlineLearningOutcomes = camelKeys(
 
 const selectOutlineWeeklyTopics = camelKeys(
   outlineId => submitQuery`
-  SELECT weekly_topic_id, week_no, week_date, subject_title, details_text, tasks_private_study_text
+  SELECT weekly_topic_id, week_no, subject_title, details_text, tasks_private_study_text
   FROM outline_weekly_topics
   WHERE outline_id = ${outlineId}
   ORDER BY week_no ASC
@@ -87,19 +106,17 @@ const selectOutlineWeeklyTopicClos = camelKeys(
 );
 
 const selectOutlinePolicies = camelKeys(
-  outlineId => submitQuery`
+  () => submitQuery`
   SELECT policy_id, policy_order, title, body_text
   FROM outline_policies
-  WHERE outline_id = ${outlineId}
   ORDER BY policy_order ASC
 `
 );
 
 const selectOutlineReferenceLinks = camelKeys(
-  outlineId => submitQuery`
+  () => submitQuery`
   SELECT reference_link_id, link_order, label, url
   FROM outline_reference_links
-  WHERE outline_id = ${outlineId}
   ORDER BY link_order ASC
 `
 );
@@ -125,25 +142,12 @@ const selectOutlineEvaluationItems = camelKeys(
     item_order,
     name,
     category,
+    \`count\`,
     weight_percent,
     notes
   FROM outline_evaluation_items
   WHERE outline_id = ${outlineId}
   ORDER BY item_order ASC
-`
-);
-
-const selectOutlineEvaluationItemClos = camelKeys(
-  outlineId => submitQuery`
-  SELECT
-    oeic.evaluation_item_id,
-    clo.clo_id,
-    clo.clo_number
-  FROM outline_evaluation_item_clos oeic
-  JOIN outline_evaluation_items oei ON oei.evaluation_item_id = oeic.evaluation_item_id
-  JOIN outline_learning_outcomes clo ON clo.clo_id = oeic.clo_id
-  WHERE oei.outline_id = ${outlineId}
-  ORDER BY oei.item_order ASC, clo.clo_number ASC
 `
 );
 
@@ -158,12 +162,24 @@ const selectOutlinePrerequisiteCourseCodes = camelKeys(
 `
 );
 
+const selectProgramLearningOutcomes = camelKeys(
+  outlineId => submitQuery`
+  SELECT plo_id, plo_number, statement
+  FROM program_learning_outcomes plo
+  JOIN courses c ON c.program_id = plo.program_id
+  JOIN course_outlines co ON co.course_id = c.course_id
+  WHERE co.outline_id = ${outlineId}
+  ORDER BY plo_number ASC
+`
+);
+
 const fetchOutlineById = async ({ outlineId }) => {
   const outline = await selectOutlineById(outlineId);
   if (!outline) return null;
 
   const [
     objectives,
+    assistants,
     contentItems,
     learningOutcomes,
     weeklyTopics,
@@ -172,20 +188,21 @@ const fetchOutlineById = async ({ outlineId }) => {
     referenceLinks,
     workloadItems,
     evaluationItems,
-    evaluationItemClos,
-    prerequisiteCourseCodes
+    prerequisiteCourseCodes,
+    programLearningOutcomes
   ] = await Promise.all([
     selectOutlineObjectives(outlineId),
+    selectOutlineAssistants(outlineId),
     selectOutlineContentItems(outlineId),
     selectOutlineLearningOutcomes(outlineId),
     selectOutlineWeeklyTopics(outlineId),
     selectOutlineWeeklyTopicClos(outlineId),
-    selectOutlinePolicies(outlineId),
-    selectOutlineReferenceLinks(outlineId),
+    selectOutlinePolicies(),
+    selectOutlineReferenceLinks(),
     selectOutlineWorkloadItems(outlineId),
     selectOutlineEvaluationItems(outlineId),
-    selectOutlineEvaluationItemClos(outlineId),
-    selectOutlinePrerequisiteCourseCodes(outlineId)
+    selectOutlinePrerequisiteCourseCodes(outlineId),
+    selectProgramLearningOutcomes(outlineId)
   ]);
 
   const cloMapByTopicId = weeklyTopicClos.reduce((acc, item) => {
@@ -197,17 +214,21 @@ const fetchOutlineById = async ({ outlineId }) => {
     return acc;
   }, {});
 
-  const cloMapByEvaluationItemId = evaluationItemClos.reduce((acc, item) => {
-    if (!acc[item.evaluationItemId]) acc[item.evaluationItemId] = [];
-    acc[item.evaluationItemId].push({
-      cloId: item.cloId,
-      cloNumber: item.cloNumber
-    });
-    return acc;
-  }, {});
-
   return {
     ...outline,
+    lecturer: {
+      userId: outline.lecturerUserId,
+      firstName: outline.lecturerFirstName,
+      lastName: outline.lecturerLastName,
+      email: outline.lecturerEmail
+    },
+    assistantUserIds: assistants.map(item => item.assistantUserId),
+    assistants: assistants.map(item => ({
+      userId: item.assistantUserId,
+      firstName: item.firstName,
+      lastName: item.lastName,
+      email: item.email
+    })),
     objectives,
     contentItems,
     learningOutcomes,
@@ -219,10 +240,8 @@ const fetchOutlineById = async ({ outlineId }) => {
     referenceLinks,
     workloadItems,
     prerequisiteCourseCodes: prerequisiteCourseCodes.map(item => item.code),
-    evaluationItems: evaluationItems.map(item => ({
-      ...item,
-      clos: cloMapByEvaluationItemId[item.evaluationItemId] || []
-    }))
+    programLearningOutcomes,
+    evaluationItems
   };
 };
 

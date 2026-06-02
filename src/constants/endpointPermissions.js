@@ -23,6 +23,12 @@ const ENDPOINT_PERMISSIONS = {
   },
   terms: {
     READ: "terms.read"
+  },
+  userTypes: {
+    READ: "userTypes.read",
+    WRITE: "userTypes.write",
+    EDIT: "userTypes.edit",
+    DELETE: "userTypes.delete"
   }
 };
 

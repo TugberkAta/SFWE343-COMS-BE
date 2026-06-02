@@ -8,22 +8,26 @@ const createOutlinePolicies = require("~root/actions/courseOutline/createOutline
 const createOutlineReferenceLinks = require("~root/actions/courseOutline/createOutlineReferenceLinks");
 const createOutlineWorkloadItems = require("~root/actions/courseOutline/createOutlineWorkloadItems");
 const createOutlineEvaluationItems = require("~root/actions/courseOutline/createOutlineEvaluationItems");
-const createOutlineEvaluationItemClos = require("~root/actions/courseOutline/createOutlineEvaluationItemClos");
+const createOutlineAssistants = require("~root/actions/courseOutline/createOutlineAssistants");
+const createProgramLearningOutcomes = require("~root/actions/courseOutline/createProgramLearningOutcomes");
 const {
   startTransaction,
   commitTransaction,
   rollbackTransaction
 } = require("~root/lib/database");
 const handleAPIError = require("~root/utils/handleAPIError");
+const postCourseOutlineSchema = require("./schemas/postCourseOutlineSchema");
 
 const postCourseOutline = async (req, res) => {
   const {
     courseId,
     termId,
     lecturerUserId,
-    assistantUserId,
+    assistantUserIds,
     textbooksText,
     additionalReadingText,
+    officeHours,
+    officeCode,
     createdByUserId,
     objectives,
     contentItems,
@@ -32,11 +36,20 @@ const postCourseOutline = async (req, res) => {
     policies,
     referenceLinks,
     workloadItems,
-    evaluationItems
+    evaluationItems,
+    programLearningOutcomes
   } = req.body;
+  const normalizedAssistantUserIds = Array.isArray(assistantUserIds)
+    ? assistantUserIds
+    : [];
 
   let transactionStarted = false;
   try {
+    await postCourseOutlineSchema.validate(
+      { learningOutcomes },
+      { abortEarly: false }
+    );
+
     await startTransaction();
     transactionStarted = true;
 
@@ -44,10 +57,16 @@ const postCourseOutline = async (req, res) => {
       courseId,
       termId,
       lecturerUserId,
-      assistantUserId,
       textbooksText,
       additionalReadingText,
+      officeHours,
+      officeCode,
       createdByUserId
+    });
+
+    await createOutlineAssistants({
+      outlineId,
+      assistantUserIds: normalizedAssistantUserIds
     });
 
     await createOutlineObjectives({ outlineId, objectives });
@@ -64,15 +83,15 @@ const postCourseOutline = async (req, res) => {
     });
     await createOutlineWeeklyTopicClos({ topicMap, cloMap });
 
-    await createOutlinePolicies({ outlineId, policies });
-    await createOutlineReferenceLinks({ outlineId, referenceLinks });
+    await createOutlinePolicies({ policies });
+    await createOutlineReferenceLinks({ referenceLinks });
+    await createProgramLearningOutcomes({ courseId, programLearningOutcomes });
     await createOutlineWorkloadItems({ outlineId, workloadItems });
 
-    const evalMap = await createOutlineEvaluationItems({
+    await createOutlineEvaluationItems({
       outlineId,
       evaluationItems
     });
-    await createOutlineEvaluationItemClos({ evalMap, cloMap });
 
     await commitTransaction();
     transactionStarted = false;

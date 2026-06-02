@@ -13,9 +13,11 @@ const postApproveUser = require("./controllers/users/approveUser");
 const postRejectUser = require("./controllers/users/rejectUser");
 const getUsersWithNoRole = require("./controllers/users/getUsersWithNoRole");
 const getUsersWithRole = require("./controllers/users/getUsersWithRole");
+const patchUserWithRole = require("./controllers/users/patchUserWithRole");
 const { postCourseOutline } = require("./controllers/courseOutline");
 const { patchCourseOutline } = require("./controllers/courseOutline/patch");
 const {
+  getUserTypes,
   postUserType,
   putUserType,
   removeUserType
@@ -27,6 +29,7 @@ const getTerms = require("./controllers/terms/getTerms");
 const getOutlines = require("./controllers/courseOutlines/getOutlines");
 const getOutlineById = require("./controllers/courseOutlines/getOutlineById");
 const getOutlinePdfById = require("./controllers/courseOutlines/getOutlinePdfById");
+const getCourseSpecificationPdfById = require("./controllers/courseOutlines/getCourseSpecificationPdfById");
 const deleteOutlineById = require("./controllers/courseOutlines/deleteOutlineById");
 const {
   postSubmitOutline,
@@ -73,7 +76,20 @@ router.get(
   getUsersWithRole
 );
 
+router.patch(
+  "/users/with-role/:userId",
+  authentication,
+  authorise({ permissions: [ENDPOINT_PERMISSIONS.users.EDIT] }),
+  patchUserWithRole
+);
+
 // USER TYPES
+router.get(
+  "/user-types",
+  authentication,
+  authorise({ permissions: [ENDPOINT_PERMISSIONS.userTypes.READ] }),
+  getUserTypes
+);
 router.post("/user-types", authentication, postUserType);
 router.put("/user-types/:userTypeId", authentication, putUserType);
 router.delete("/user-types/:userTypeId", authentication, removeUserType);
@@ -98,6 +114,11 @@ router.get("/terms", authentication, getTerms);
 router.get("/outlines", authentication, getOutlines);
 router.get("/outlines/:outlineId", authentication, getOutlineById);
 router.get("/outlines/:outlineId/pdf", authentication, getOutlinePdfById);
+router.get(
+  "/outlines/:outlineId/specification-pdf",
+  authentication,
+  getCourseSpecificationPdfById
+);
 router.delete("/outlines/:outlineId", authentication, deleteOutlineById);
 // OUTLINE APPROVAL
 router.post("/outlines/:outlineId/submit", authentication, postSubmitOutline);

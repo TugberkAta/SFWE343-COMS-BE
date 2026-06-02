@@ -10,7 +10,7 @@ const selectUsersWithNoRole = () => submitQuery`
     user_role
   FROM users
   LEFT JOIN user_roles ON users.user_role_id = user_roles.user_role_id
-  WHERE users.user_role_id IS NULL
+  WHERE users.approved = FALSE
 `;
 
 module.exports = camelKeys(selectUsersWithNoRole);

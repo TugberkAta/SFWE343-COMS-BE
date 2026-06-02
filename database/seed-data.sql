@@ -75,12 +75,16 @@ VALUES (
   )
 );
 
-INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, created_at)
-VALUES (1, "Ahmet", "Akinsql", "ahmet@akinsql.com", SHA2(CONCAT("password","SECRET_SALT"), 224), 1, "2020-11-20 12:00:00");
-INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, created_at)
-VALUES (2, "Joe", "Bloggs","joebloggs@gmail.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, "2020-11-20 12:00:00");
-INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, created_at)
-VALUES (3, "Jim", "Bloggs" , "jimbloggs@yahoo.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, "2020-11-20 12:00:00");
+INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, user_type_id, approved, created_at)
+VALUES (1, "Ahmet", "Akinsql", "ahmet@akinsql.com", SHA2(CONCAT("password","SECRET_SALT"), 224), 1, 1, TRUE, "2020-11-20 12:00:00");
+INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, user_type_id, approved, created_at)
+VALUES (2, "Joe", "Bloggs","joebloggs@gmail.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, 4, TRUE, "2020-11-20 12:00:00");
+INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, user_type_id, approved, created_at)
+VALUES (3, "Jim", "Bloggs" , "jimbloggs@yahoo.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, 4, TRUE, "2020-11-20 12:00:00");
+INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, user_type_id, approved, created_at)
+VALUES (4, "Paul", "PendingReject", "paul.reject@test.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, null, FALSE, "2020-11-20 12:00:00");
+INSERT INTO users (user_id, first_name, last_name, email, password, user_role_id, user_type_id, approved, created_at)
+VALUES (5, "Paula", "PendingApprove", "paula.approve@test.com", SHA2(CONCAT("password","SECRET_SALT"), 224), null, null, FALSE, "2020-11-20 12:00:00");
 
 INSERT INTO departments (department_id, type, name)
 VALUES (1, "undergraduate", "Faculty of Law");
@@ -185,6 +189,27 @@ INSERT INTO programs (program_id, department_id, name, language)
 VALUES (35, 9, "Pharmacy", "Turkish");
 INSERT INTO programs (program_id, department_id, name, language)
 VALUES (36, 9, "Pharmacy", "English");
+
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (1, 11, 1, "Apply advanced mathematics, science, and engineering fundamentals to analyse and solve complex computer engineering problems.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (2, 11, 2, "Integrate and evaluate knowledge from current and emerging technologies to identify, formulate, and investigate complex engineering problems through systematic inquiry.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (3, 11, 3, "Design and develop innovative engineering solutions, taking into account health, safety, legal, cultural, societal, and environmental sustainability factors.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (4, 11, 4, "Select and utilize modern engineering tools, software, and techniques effectively, with an awareness of their applicability and limitations.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (5, 11, 5, "Assess and interpret the societal, environmental, and ethical implications of engineering solutions, applying professional judgment in decision-making.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (6, 11, 6, "Demonstrate ethical conduct, professional responsibility, and adherence to recognized standards and codes in engineering practice.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (7, 11, 7, "Work independently and collaborate effectively in multidisciplinary and multicultural teams, demonstrating leadership and responsibility in achieving shared goals.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (8, 11, 8, "Communicate effectively with peers, professionals, and society at large through technical reports, documentation, presentations, and clear instructions.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (9, 11, 9, "Plan, manage, and execute engineering projects using sound principles of project management, organization, and leadership in diverse environments.");
+INSERT INTO program_learning_outcomes (plo_id, program_id, plo_number, statement)
+VALUES (10, 11, 10, "Engage in autonomous lifelong learning by maintaining coding proficiency, applying advanced research methods, and adapting to technological advancements to ensure continuous professional growth.");
 
 INSERT INTO courses (
   course_id, program_id, code, name, language, course_level_text, category,
@@ -314,15 +339,22 @@ INSERT INTO terms (term_id, academic_year, semester, start_date, end_date)
 VALUES (4, "2025-2026", "spring", "2026-02-16", "2026-06-12");
 
 INSERT INTO course_outlines (
-  outline_id, course_id, term_id, version_no, status, lecturer_user_id, assistant_user_id,
-  textbooks_text, additional_reading_text,
+  outline_id, course_id, term_id, version_no, status, lecturer_user_id,
+  textbooks_text, additional_reading_text, office_hours, office_code,
   created_by_user_id, created_at, updated_at
 ) VALUES (
-  1, 30, 4, 1, "published", 1, null,
+  1, 30, 4, 1, "published", 1,
   "System Analysis and Design, 11th Edition, Julie E. Kendall and Kenneth E. Kendall.",
   "Course pack prepared by the instructor.",
+  "Monday 13:00-15:00",
+  "ENG-B204",
   1, "2026-02-10 09:00:00", "2026-02-10 09:00:00"
 );
+
+INSERT INTO outline_assistants (outline_id, assistant_user_id)
+VALUES (1, 2);
+INSERT INTO outline_assistants (outline_id, assistant_user_id)
+VALUES (1, 3);
 
 INSERT INTO outline_objectives (objective_id, outline_id, objective_order, objective_text)
 VALUES (1, 1, 1, "To provide students with the theoretical foundation and practical skills necessary for analyzing software requirements, modeling system design with UML, and applying project management principles in software development.");
@@ -365,20 +397,20 @@ INSERT INTO outline_workload_items (
 ) VALUES (7, 1, 7, "Preparation for Final Exam", 0, 0);
 
 INSERT INTO outline_evaluation_items (
-  evaluation_item_id, outline_id, item_order, name, category, weight_percent, notes
-) VALUES (1, 1, 1, "Quiz", "quiz", 5.00, "Initial seed distribution for SFWE343 outline.");
+  evaluation_item_id, outline_id, item_order, name, category, `count`, weight_percent, notes
+) VALUES (1, 1, 1, "Quiz", "quiz", 1, 5.00, "Initial seed distribution for SFWE343 outline.");
 INSERT INTO outline_evaluation_items (
-  evaluation_item_id, outline_id, item_order, name, category, weight_percent, notes
-) VALUES (2, 1, 2, "Homework / Assignments", "assignment", 15.00, "Initial seed distribution for SFWE343 outline.");
+  evaluation_item_id, outline_id, item_order, name, category, `count`, weight_percent, notes
+) VALUES (2, 1, 2, "Homework / Assignments", "assignment", 3, 15.00, "Initial seed distribution for SFWE343 outline.");
 INSERT INTO outline_evaluation_items (
-  evaluation_item_id, outline_id, item_order, name, category, weight_percent, notes
-) VALUES (3, 1, 3, "Software Development Project", "project", 30.00, "Initial seed distribution for SFWE343 outline.");
+  evaluation_item_id, outline_id, item_order, name, category, `count`, weight_percent, notes
+) VALUES (3, 1, 3, "Software Development Project", "project", 1, 30.00, "Initial seed distribution for SFWE343 outline.");
 INSERT INTO outline_evaluation_items (
-  evaluation_item_id, outline_id, item_order, name, category, weight_percent, notes
-) VALUES (4, 1, 4, "Midterm Exam", "midterm", 20.00, "Initial seed distribution for SFWE343 outline.");
+  evaluation_item_id, outline_id, item_order, name, category, `count`, weight_percent, notes
+) VALUES (4, 1, 4, "Midterm Exam", "midterm", 1, 20.00, "Initial seed distribution for SFWE343 outline.");
 INSERT INTO outline_evaluation_items (
-  evaluation_item_id, outline_id, item_order, name, category, weight_percent, notes
-) VALUES (5, 1, 5, "Final Exam", "final", 30.00, "Initial seed distribution for SFWE343 outline.");
+  evaluation_item_id, outline_id, item_order, name, category, `count`, weight_percent, notes
+) VALUES (5, 1, 5, "Final Exam", "final", 1, 30.00, "Initial seed distribution for SFWE343 outline.");
 
 INSERT INTO outline_learning_outcomes (clo_id, outline_id, clo_number, statement)
 VALUES (1, 1, 1, "Explain and evaluate the role, responsibilities, and required skills of the system analyst in software development projects.");
@@ -441,15 +473,12 @@ INSERT INTO outline_weekly_topic_clos (weekly_topic_id, clo_id) VALUES (14, 5);
 INSERT INTO outline_weekly_topic_clos (weekly_topic_id, clo_id) VALUES (15, 4);
 INSERT INTO outline_weekly_topic_clos (weekly_topic_id, clo_id) VALUES (15, 5);
 
-INSERT INTO outline_policies (policy_id, outline_id, policy_order, title, body_text)
-VALUES (1, 1, 1, "Attendance", "Students are expected to attend all classes, studio/lab sessions, and project meetings unless excused.");
-INSERT INTO outline_policies (policy_id, outline_id, policy_order, title, body_text)
-VALUES (2, 1, 2, "Academic Integrity", "All submissions must be original. Plagiarism and unauthorized collaboration are handled under university regulations.");
-INSERT INTO outline_policies (policy_id, outline_id, policy_order, title, body_text)
-VALUES (3, 1, 3, "Project Work", "Project milestones and final presentations must be submitted on time. Team contribution is expected and may be individually reviewed.");
-
-INSERT INTO outline_reference_links (reference_link_id, outline_id, link_order, label, url)
-VALUES (1, 1, 1, "Course Specification (SFWE343)", "https://fiu.edu.tr/");
+INSERT INTO outline_policies (policy_id, policy_order, title, body_text)
+VALUES (1, 1, "Attendance", "Students are expected to attend all classes, studio/lab sessions, and project meetings unless excused.");
+INSERT INTO outline_policies (policy_id, policy_order, title, body_text)
+VALUES (2, 2, "Academic Integrity", "All submissions must be original. Plagiarism and unauthorized collaboration are handled under university regulations.");
+INSERT INTO outline_policies (policy_id, policy_order, title, body_text)
+VALUES (3, 3, "Project Work", "Project milestones and final presentations must be submitted on time. Team contribution is expected and may be individually reviewed.");
 
 INSERT INTO user_types (user_type_id, type_name, permissions_json)
 VALUES (5, "admin_type", JSON_ARRAY(
@@ -458,7 +487,13 @@ VALUES (5, "admin_type", JSON_ARRAY(
   "users.edit",
   "users.approve",
   "outlines.read",
-  "outlines.write"
+  "outlines.write",
+  "userTypes.read",
+  "userTypes.write",
+  "userTypes.edit",
+  "userTypes.delete"
 ));
 
 UPDATE users SET user_type_id = 5 WHERE user_id = 1;
+INSERT INTO outline_reference_links (reference_link_id, link_order, label, url)
+VALUES (1, 1, "Course Specification (SFWE343)", "https://fiu.edu.tr/");

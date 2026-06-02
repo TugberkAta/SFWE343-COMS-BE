@@ -8,8 +8,9 @@ const patchOutlinePolicies = require("~root/actions/courseOutline/patchOutlinePo
 const patchOutlineReferenceLinks = require("~root/actions/courseOutline/patchOutlineReferenceLinks");
 const patchOutlineWorkloadItems = require("~root/actions/courseOutline/patchOutlineWorkloadItems");
 const patchOutlineEvaluationItems = require("~root/actions/courseOutline/patchOutlineEvaluationItems");
-const patchOutlineEvaluationItemClos = require("~root/actions/courseOutline/patchOutlineEvaluationItemClos");
+const patchOutlineAssistants = require("~root/actions/courseOutline/patchOutlineAssistants");
 const handleAPIError = require("~root/utils/handleAPIError");
+const patchCourseOutlineSchema = require("./schemas/patchCourseOutlineSchema");
 
 const patchCourseOutline = async (req, res) => {
   const { outlineId } = req.params;
@@ -17,9 +18,11 @@ const patchCourseOutline = async (req, res) => {
     status,
     termId,
     lecturerUserId,
-    assistantUserId,
+    assistantUserIds,
     textbooksText,
     additionalReadingText,
+    officeHours,
+    officeCode,
     objectives,
     contentItems,
     learningOutcomes,
@@ -29,16 +32,29 @@ const patchCourseOutline = async (req, res) => {
     workloadItems,
     evaluationItems
   } = req.body;
+  const normalizedAssistantUserIds = Array.isArray(assistantUserIds)
+    ? assistantUserIds
+    : undefined;
 
   try {
+    await patchCourseOutlineSchema.validate(
+      { learningOutcomes },
+      { abortEarly: false }
+    );
+
     await patchCourseOutlineBase({
       outlineId,
       status,
       termId,
       lecturerUserId,
-      assistantUserId,
       textbooksText,
-      additionalReadingText
+      additionalReadingText,
+      officeHours,
+      officeCode
+    });
+    await patchOutlineAssistants({
+      outlineId,
+      assistantUserIds: normalizedAssistantUserIds
     });
 
     await patchOutlineObjectives({ outlineId, objectives });
@@ -55,15 +71,14 @@ const patchCourseOutline = async (req, res) => {
     });
     await patchOutlineWeeklyTopicClos({ topicMap, cloMap });
 
-    await patchOutlinePolicies({ outlineId, policies });
-    await patchOutlineReferenceLinks({ outlineId, referenceLinks });
+    await patchOutlinePolicies({ policies });
+    await patchOutlineReferenceLinks({ referenceLinks });
     await patchOutlineWorkloadItems({ outlineId, workloadItems });
 
-    const evalMap = await patchOutlineEvaluationItems({
+    await patchOutlineEvaluationItems({
       outlineId,
       evaluationItems
     });
-    await patchOutlineEvaluationItemClos({ evalMap, cloMap });
 
     return res.send({ outlineId });
   } catch (err) {
