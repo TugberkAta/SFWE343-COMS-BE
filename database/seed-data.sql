@@ -18,11 +18,13 @@ VALUES (1, "Admin");
 INSERT INTO user_types (user_type_id, type_name, permissions_json)
 VALUES (
   1,
-  "quality_assurance_head",
+  "quality_assurance",
   JSON_ARRAY(
     "outlines.read",
     "outlines.edit",
     "outlines.download",
+    "approval.stage2",
+    "approval.stage2.approve",
     "programs.read",
     "departments.read",
     "courses.read",
@@ -33,25 +35,13 @@ VALUES (
 INSERT INTO user_types (user_type_id, type_name, permissions_json)
 VALUES (
   2,
-  "quality_assurance_committee",
-  JSON_ARRAY(
-    "outlines.read",
-    "outlines.download",
-    "programs.read",
-    "departments.read",
-    "courses.read",
-    "terms.read"
-  )
-);
-
-INSERT INTO user_types (user_type_id, type_name, permissions_json)
-VALUES (
-  3,
   "program_leader",
   JSON_ARRAY(
     "outlines.read",
     "outlines.edit",
     "outlines.download",
+    "approval.stage1",
+    "approval.stage1.approve",
     "programs.read",
     "departments.read",
     "courses.read",
@@ -351,6 +341,34 @@ INSERT INTO course_outlines (
   1, "2026-02-10 09:00:00", "2026-02-10 09:00:00"
 );
 
+-- Stage 1 review example: SFWE343 (same course as outline 1), awaiting program leader review
+INSERT INTO course_outlines (
+  outline_id, course_id, term_id, version_no, status, lecturer_user_id,
+  textbooks_text, additional_reading_text, office_hours, office_code,
+  created_by_user_id, created_at, updated_at
+) VALUES (
+  2, 30, 4, 2, "in_review", 1,
+  "System Analysis and Design, 11th Edition, Julie E. Kendall and Kenneth E. Kendall.",
+  "Course pack prepared by the instructor.",
+  "Monday 13:00-15:00",
+  "ENG-B204",
+  1, "2026-03-05 09:00:00", "2026-03-05 09:00:00"
+);
+
+-- Stage 2 approval example: SFWE343 (same course as outline 1), stage 1 approved, awaiting QA approval
+INSERT INTO course_outlines (
+  outline_id, course_id, term_id, version_no, status, lecturer_user_id,
+  textbooks_text, additional_reading_text, office_hours, office_code,
+  created_by_user_id, created_at, updated_at
+) VALUES (
+  3, 30, 4, 3, "in_review", 1,
+  "System Analysis and Design, 11th Edition, Julie E. Kendall and Kenneth E. Kendall.",
+  "Course pack prepared by the instructor.",
+  "Monday 13:00-15:00",
+  "ENG-B204",
+  1, "2026-02-20 09:00:00", "2026-03-01 10:00:00"
+);
+
 INSERT INTO outline_assistants (outline_id, assistant_user_id)
 VALUES (1, 2);
 INSERT INTO outline_assistants (outline_id, assistant_user_id)
@@ -473,6 +491,32 @@ INSERT INTO outline_weekly_topic_clos (weekly_topic_id, clo_id) VALUES (14, 5);
 INSERT INTO outline_weekly_topic_clos (weekly_topic_id, clo_id) VALUES (15, 4);
 INSERT INTO outline_weekly_topic_clos (weekly_topic_id, clo_id) VALUES (15, 5);
 
+INSERT INTO outline_objectives (objective_id, outline_id, objective_order, objective_text)
+VALUES (3, 2, 1, "Draft SFWE343 outline submitted for stage 1 program leader review.");
+INSERT INTO outline_objectives (objective_id, outline_id, objective_order, objective_text)
+VALUES (4, 3, 1, "Revised SFWE343 outline approved at stage 1 and pending QA committee approval.");
+
+INSERT INTO outline_approval_workflows (
+  workflow_id, outline_id, current_stage, submission_count
+) VALUES (1, 2, "stage_1_review", 1);
+
+INSERT INTO outline_approval_workflows (
+  workflow_id, outline_id, current_stage, submission_count,
+  stage_1_reviewer_user_id, stage_1_reviewed_at
+) VALUES (
+  2, 3, "stage_2_approval", 1,
+  1, "2026-03-01 10:00:00"
+);
+
+INSERT INTO outline_approval_comments (
+  approval_comment_id, outline_id, workflow_stage, comment_type, comment_text,
+  created_by_user_id, created_at
+) VALUES (
+  1, 3, "stage_1_review", "approval",
+  "Stage 1 review complete. Outline content meets program requirements and is ready for QA committee approval.",
+  1, "2026-03-01 10:00:00"
+);
+
 INSERT INTO outline_policies (policy_id, policy_order, title, body_text)
 VALUES (1, 1, "Attendance", "Students are expected to attend all classes, studio/lab sessions, and project meetings unless excused.");
 INSERT INTO outline_policies (policy_id, policy_order, title, body_text)
@@ -486,12 +530,23 @@ VALUES (5, "admin_type", JSON_ARRAY(
   "users.write",
   "users.edit",
   "users.approve",
-  "outlines.read",
-  "outlines.write",
   "userTypes.read",
   "userTypes.write",
   "userTypes.edit",
-  "userTypes.delete"
+  "userTypes.delete",
+  "outlines.read",
+  "outlines.write",
+  "outlines.edit",
+  "outlines.delete",
+  "outlines.download",
+  "approval.stage1",
+  "approval.stage1.approve",
+  "approval.stage2",
+  "approval.stage2.approve",
+  "programs.read",
+  "departments.read",
+  "courses.read",
+  "terms.read"
 ));
 
 UPDATE users SET user_type_id = 5 WHERE user_id = 1;

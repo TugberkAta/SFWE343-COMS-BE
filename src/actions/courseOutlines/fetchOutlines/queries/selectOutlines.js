@@ -16,12 +16,21 @@ const selectOutlines = () => submitQuery`
     d.department_id,
     d.name AS department_name,
     t.academic_year,
-    t.semester
+    t.semester,
+    oaw.workflow_id,
+    oaw.current_stage,
+    oaw.submission_count,
+    oaw.stage_1_reviewer_user_id,
+    oaw.stage_1_reviewed_at,
+    oaw.stage_2_approver_user_id,
+    oaw.stage_2_approved_at,
+    oaw.final_approved_at
   FROM course_outlines co
   JOIN courses c ON c.course_id = co.course_id
   JOIN programs p ON p.program_id = c.program_id
   JOIN departments d ON d.department_id = p.department_id
   JOIN terms t ON t.term_id = co.term_id
+  LEFT JOIN outline_approval_workflows oaw ON oaw.outline_id = co.outline_id
   ORDER BY co.updated_at DESC
 `;
 

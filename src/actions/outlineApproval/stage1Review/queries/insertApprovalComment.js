@@ -17,7 +17,7 @@ const insertApprovalComment = ({
     ${outlineId},
     ${workflowStage},
     ${commentType},
-    ${commentText},
+    ${commentText ?? ""},
     ${createdByUserId}
   )
 `;

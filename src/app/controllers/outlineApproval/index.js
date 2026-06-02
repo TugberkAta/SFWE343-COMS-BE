@@ -3,6 +3,7 @@ const stage1Review = require("~root/actions/outlineApproval/stage1Review");
 const stage2Approval = require("~root/actions/outlineApproval/stage2Approval");
 const resubmitOutline = require("~root/actions/outlineApproval/resubmitOutline");
 const handleAPIError = require("~root/utils/handleAPIError");
+const outlineApprovalActionSchema = require("./schemas/outlineApprovalActionSchema");
 
 const postSubmitOutline = async (req, res) => {
   const { outlineId } = req.params;
@@ -19,7 +20,19 @@ const postStage1Review = async (req, res) => {
   const { action, commentText } = req.body;
   const { userId: reviewerUserId } = req.user;
   try {
-    await stage1Review({ outlineId, action, commentText, reviewerUserId });
+    const {
+      action: validatedAction,
+      commentText: validatedCommentText
+    } = await outlineApprovalActionSchema.validate(
+      { action, commentText },
+      { abortEarly: false }
+    );
+    await stage1Review({
+      outlineId,
+      action: validatedAction,
+      commentText: validatedCommentText,
+      reviewerUserId
+    });
     return res.send({ message: `Outline ${action}d at stage 1.` });
   } catch (err) {
     return handleAPIError(res, err);
@@ -31,7 +44,19 @@ const postStage2Approval = async (req, res) => {
   const { action, commentText } = req.body;
   const { userId: approverUserId } = req.user;
   try {
-    await stage2Approval({ outlineId, action, commentText, approverUserId });
+    const {
+      action: validatedAction,
+      commentText: validatedCommentText
+    } = await outlineApprovalActionSchema.validate(
+      { action, commentText },
+      { abortEarly: false }
+    );
+    await stage2Approval({
+      outlineId,
+      action: validatedAction,
+      commentText: validatedCommentText,
+      approverUserId
+    });
     return res.send({ message: `Outline ${action}d at stage 2.` });
   } catch (err) {
     return handleAPIError(res, err);
