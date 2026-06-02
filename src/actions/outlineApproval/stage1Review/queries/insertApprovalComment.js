@@ -6,7 +6,11 @@ const insertApprovalComment = ({
   commentType,
   commentText,
   createdByUserId
-}) => submitQuery`
+}) => {
+  const resolvedCommentText =
+    commentText === undefined || commentText === null ? "" : commentText;
+
+  return submitQuery`
   INSERT INTO outline_approval_comments (
     outline_id,
     workflow_stage,
@@ -17,9 +21,10 @@ const insertApprovalComment = ({
     ${outlineId},
     ${workflowStage},
     ${commentType},
-    ${commentText ?? ""},
+    ${resolvedCommentText},
     ${createdByUserId}
   )
 `;
+};
 
 module.exports = insertApprovalComment;
