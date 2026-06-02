@@ -31,6 +31,12 @@ const getOutlineById = require("./controllers/courseOutlines/getOutlineById");
 const getOutlinePdfById = require("./controllers/courseOutlines/getOutlinePdfById");
 const getCourseSpecificationPdfById = require("./controllers/courseOutlines/getCourseSpecificationPdfById");
 const deleteOutlineById = require("./controllers/courseOutlines/deleteOutlineById");
+const {
+  postSubmitOutline,
+  postStage1Review,
+  postStage2Approval,
+  postResubmitOutline
+} = require("./controllers/outlineApproval");
 
 const router = express.Router();
 
@@ -114,5 +120,25 @@ router.get(
   getCourseSpecificationPdfById
 );
 router.delete("/outlines/:outlineId", authentication, deleteOutlineById);
+// OUTLINE APPROVAL
+router.post("/outlines/:outlineId/submit", authentication, postSubmitOutline);
+
+router.post(
+  "/outlines/:outlineId/stage1-review",
+  authentication,
+  postStage1Review
+);
+
+router.post(
+  "/outlines/:outlineId/stage2-approval",
+  authentication,
+  postStage2Approval
+);
+
+router.post(
+  "/outlines/:outlineId/resubmit",
+  authentication,
+  postResubmitOutline
+);
 
 module.exports = router;
