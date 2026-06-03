@@ -33,7 +33,10 @@ const postStage1Review = async (req, res) => {
       commentText: validatedCommentText,
       reviewerUserId
     });
-    return res.send({ message: `Outline ${action}d at stage 1.` });
+    const actionMessages = { approve: "approved", reject: "rejected" };
+    return res.send({
+      message: `Outline ${actionMessages[action]} at stage 1.`
+    });
   } catch (err) {
     return handleAPIError(res, err);
   }
@@ -57,7 +60,10 @@ const postStage2Approval = async (req, res) => {
       commentText: validatedCommentText,
       approverUserId
     });
-    return res.send({ message: `Outline ${action}d at stage 2.` });
+    const actionMessages = { approve: "approved", reject: "rejected" };
+    return res.send({
+      message: `Outline ${actionMessages[action]} at stage 2.`
+    });
   } catch (err) {
     return handleAPIError(res, err);
   }
